@@ -1,0 +1,119 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's August 28, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+This week's riddler comes courtesy of Duane Miller:
+\begin{question}
+Two players (call them Anna and Ben) sit down to play some games of War (the card game).  How many games, on average, do they need to play until one game lasts for exactly $26$ turns with no wars?
+\end{question}
+
+First off, I will start by giving a quick description of a standard result.  Assume that the probability of one game lasting exactly $26$ turns with no wars is $p$.  Let $t$ be the expected number of games until such a game happens.  Then one has that $t = 1 + (1-p)t$: the two players play a game, and with probability $(1-p)$, they need to keep on playing.  This can be easily solved to see that $t = p^{-1}$, so it comes down to computing the probability that one game lasts for exactly $26$ turns with no wars.
+
+To compute this probability, I will split it up into two steps.  We can write this probability as $p_1p_2$ where $p_1$ is the probability that the first $26$ turns have no wars, and $p_2$ is the probability that the same person wins every single showdown in the first $26$ turns.  One can quickly get that $p_2 = \frac{2}{2^{26}}$: the probability that Anna wins one showdown is $\frac{1}{2}$, so the probability that she wins every showdown is $\frac{1}{2^{26}}$, and the same can be said for Ben.
+
+Now, on to $p_1$.  There is a quick heuristic to get a rough idea how big $p_1$ should be.  First, one computes the probability that the first showdown isn't a war: there are $\frac{52\cdot51}{2}$ pairs of cards, and $13\cdot\frac{4\cdot3}{2}$ pairs of cards that are of the same rank, so the probability that the first showdown is a war is $\frac{13\cdot12}{52\cdot51} = \frac{1}{17}$ and so the probability it isn't a war is $\frac{16}{17}$.  Now, assume for no good reason that the probability of any of the successive showdowns not being a war is also $\frac{16}{17}$ and that these events are independent.  Then, one would get that $p_1 = \left(\frac{16}{17}\right)^{26} = .20675 \ldots$.
+
+I don't actually see a nice way to compute $p_1$ exactly, so I have turned to simulations.  Shuffling a deck $100000000$ times in python, I got $21023534$ successes, for a probability of $.21023534$ that there are no wars in the first $26$ turns.  Thus, I got that the probability that a game ends in $26$ turns with no wars is $\frac{.21023534}{2^25}$, and the expected number games Anna and Bob need to play until that happens is $159604146.477\ldots$.  The exactness here is unjustified, but its reasonable to say that Anna and Bob need to play roughly $160$ million games of war until they get such a game.  Has this happened in real life?  That seems reasonable: it asks each person in the US to play one game of war at one point in their life.
+
+Finally, here is my code:
+\begin{verbatim}
+import random
+
+samples = 100000000
+successes = 0
+
+deck = []
+
+##This loop builds the deck.  It views each card
+##as a number between 0 and 12 and doesn't
+##distinguish between suits.
+for i in range(13):
+    deck.append(i)
+    deck.append(i)
+    deck.append(i)
+    deck.append(i)
+
+##This loop then shuffles the deck samples times,
+##and sees if this shuffle will lead to a game
+##where the first 26 rounds have no wars.
+for i in range(samples):
+    random.shuffle(deck)
+    valid = True
+    for j in range(26):
+        if (deck[2*j] == deck[2*j+1]):
+            valid = False
+    if valid:
+        successes += 1
+
+print(successes, samples)
+print(successes/samples, (16/17)**26)
+\end{verbatim}
+\end{document}

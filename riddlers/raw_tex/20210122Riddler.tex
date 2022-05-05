@@ -1,0 +1,83 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's January 22, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+This week's riddler is about skiing down a nice slope:
+\begin{question}
+Congratulations, you’ve made it to the finals of the Riddler Ski Federation’s winter championship! There’s just one opponent left to beat, and then the gold medal will be yours.
+
+Each of you will complete two runs down the mountain, and the times of your runs will be added together. Whoever skis in the least overall time is the winner. Also, this being the Riddler Ski Federation, you have been presented detailed data on both you and your opponent. You are evenly matched, and both have the same normal probability distribution of finishing times for each run\footnote{no explanation is given as to how to attain negative times}. And for both of you, your time on the first run is completely independent of your time on the second run.
+
+For the first runs, your opponent goes first. Then, it’s your turn. As you cross the finish line, your coach excitedly signals to you that you were faster than your opponent. Without knowing either exact time, what’s the probability that you will still be ahead after the second run and earn your gold medal?
+\end{question}
+You \emph{can} do a bunch of integrals if you want.  But that sounds unfun, and there is a much more conceptual way to solve this: since you've won the first split, if you also win the second split you win no matter what; the probability that this happens is a smooth $\frac{1}{2}$, as any pair of times where you win a split is just as likely as the opposite pair of times where you lose the split.  The other half of the time, you lose the second split and so now you need to figure out the probability you win given that you win one split and lose the other.  But that is also a smooth $\frac{1}{2}$, as any pair of margins where you win overall is just as likely as the opposite pair of margins where you lose overall.  Thus, the probability that you win overall given that you won the first split is $\frac{3}{4}$.
+\end{document}

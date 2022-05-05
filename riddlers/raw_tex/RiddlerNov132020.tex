@@ -1,0 +1,150 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's November 13, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+This week's riddler, from Angela Zhou, is about thowing an oversimplified football game:
+\begin{question}
+The Georgia Birds and the Michigan Felines play a game where they flip a fair coin $101$ times. In the end, if heads comes up at least $51$ times, the Birds win; but if tails comes up at least $51$ times, the Felines win.
+
+What’s the probability that the Birds have at least a $99$ percent chance of winning at some point during the game - meaning their probability of victory is $99$ percent or greater given the flips that remain - and then proceed to lose?
+
+Extra credit: Instead of $101$ total flips, suppose there are many, many more (i.e., consider the limit as the number of flips goes to infinity). Again, the Birds win if heads comes up at least half the time. Now what’s the probability that the Birds have a win probability of at least $99$ percent at some point and then proceed to lose?
+\end{question}
+I do not have an exact answer to this.  I have a slightly inaccurate heuristic, and some code that simulates these games.  Assume that the probability that the Birds lose a game that they have at least a $.99$ chance of winning is $x$.  Every game in which they at some point have a $.99$ chance of winning, there is a unique earliest turn in which they cross that threshold (notice: this could be when they mathematically clinch victory, and this could even be after the last flip).  Therefore, if one looks at the set $P$ of all partial sequences of flips wherein the Birds cross the $.99$ chance of victory at the very end of the partial sequence, then each game being considered must start with exactly one of these partial sequences.  One can then see that the probability that the Birds lose a game given that they at some point had a $.99$ chance of victory will be a weighted average of the probability that the Birds will lose given that the game starts with one of the sequences $p \in P$.  These probabilities will be distributed between $0$ and $.01$.
+
+Obviously, the whole question is ``What is the distribution and weights of these probabilities?''  Seeing no immediately apparent structure, it is a sensible guess to guess that these probabilities are roughly uniformly distributed in the interval $[0, .01]$, which says that the probability that they lose a game that they had at some point a $.99$ chance of winning is $.005$ or $1/200$.  Taking that as a fact, one can now solve for $x$: the Birds will have a $.99$ chance of winning at some point in every game that they win as well as the games that they lose, so the probability that they have a $.99$ chance of victory is $\displaystyle{\frac{1}{2} + x}$, and so one has that $x = \displaystyle{\frac{1}{200}\left(\frac{1}{2} + x\right)}$, which can be solved to see that $x = \displaystyle{\frac{1}{398} = .00251256\ldots}$.  Obviously, this hinges on the assumption about the distribution, but it is not a wholly unreasonable guess.
+
+\emph{Update}: As Josh Silverman points out \href{https://joshmaxsilverman.github.io/2020-11-16-total-collapse/}{here}, in the limit, you will never overshoot $.99$ chance to win (as the odds that the game becomes decisive late in the contest go to $0$ as $101$ goes to $\infty$), so one gets the simple equation $\displaystyle{\frac{1}{100}\left(\frac{1}{2} + x\right) = x}$, which gives $x = \displaystyle{\frac{1}{198} = .0050505\ldots}$.
+
+I simulated $1000000$ games in python, and got that the Birds were favored to win in $501453$ games and lost $2073$ of the games that they were favored to win in, giving a value of $.002073$ for $x$.  I speculate that the reason that this value of $x$ is less than what the heuristic suggests is that there is a reasonable number of games where the Birds only crossed the $.99$ chance to win mark near the very end of the game, where they could only have reached a chance to win of $1$.
+
+Here is the code:
+\begin{verbatim}
+import random
+import math
+
+##This is computes the probability that the Birds win if
+##their lead is by x and there are y flips remaining.
+def f(x, y):
+    total = 0
+    for i in range((x+y+1)//2):
+        total += math.comb(y, i)
+    total = total/(2**y)
+    return(total)
+
+##This generates a random sequence of +/-1s of length k
+def genseq(k):
+    result = []
+    for i in range(k):
+        result.append(random.randrange(-1, 3, 2))
+    return(result)
+
+##This checks to see if the Birds lose if seq is the
+##sequence of flips.
+def loses(seq):
+    k = len(seq)
+    total = 0
+    for i in range(k):
+        total += seq[i]
+    return((total < 0))
+
+##This checks to see if the Birds have a least a tol chance
+##of winning the game at some point if the sequence of flips
+##is seq.
+def shouldwin(seq, tol):
+    k = len(seq)
+    x = 0
+    y = k
+    for i in range(k):
+        y -= 1
+        x += seq[i]
+        if(f(x, y) > tol):
+            return(True)
+    return(False)
+
+##This simulates sims games that are k flips long and tells you
+##how many games the Birds had a tol chance of winning at some
+##point as well as how many games they wound up losing after
+##having a tol chance of winning.
+def simulate(k, sims, tol):
+    potwins = 0
+    losses = 0
+    for i in range(sims):
+        s = genseq(k)
+        if(shouldwin(s, tol)):
+            potwins += 1
+            if(loses(s)):
+                losses += 1
+    print(sims, potwins, losses)
+
+simulate(101, 1000000, .99)
+\end{verbatim}
+\end{document}

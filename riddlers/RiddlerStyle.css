@@ -1,0 +1,16 @@
+a:link {
+	color: #ef0a51;
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+a:visited {
+  color: #b66f85;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+body {
+	color: #ffffff;
+	background-color: #000000;
+}

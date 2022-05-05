@@ -1,0 +1,150 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's August 14, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+Today's question, courtesy of Angela Zhou, is a question about fractured rulers:
+\begin{question}
+The Riddler Manufacturing Company makes all sorts of mathematical tools: compasses, protractors, slide rules - you name it!
+
+Recently, there was an issue with the production of foot-long rulers. It seems that each ruler was accidentally sliced at three random points along the ruler, resulting in four pieces. Looking on the bright side, that means there are now four times as many rulers - they just happen to have different lengths.
+
+On average, how long are the pieces that contain the 6-inch mark?
+\end{question}
+
+Label the three points $a$, $b$, and $c$ (in feet), and assume that $0 < a < b < c < 1$.  It will be important to compute the volume of the region of all such $\{(a, b, c)\}$.  While there are many ways to do this, to get into the necessary mood, I will do this in the most direct way possible by computing a triple integral:
+\begin{align*}
+V & = \int_0^1 \int_a^1 \int_b^1 dcdbda \\
+& = \int_0^1 \int_a^1 (1-b) dbda \\
+& = \int_0^1 \left(b-\frac{b^2}{2}\right|_a^1 da \\
+& = \int_0^1 \left(\frac{1}{2} - a + \frac{a^2}{2}\right) da \\
+& = \left(\frac{a}{2} - \frac{a^2}{2} + \frac{a^3}{6}\right|_0^1 \\
+& = \frac{1}{2} - \frac{1}{2} + \frac{1}{6} = \frac{1}{6}
+\end{align*}
+
+Now, I need to compute the length of the piece that contains the $6$ inch mark.  This breaks into four cases:
+\begin{enumerate}
+\item $\frac{1}{2} < a$, 
+\item $a < \frac{1}{2} < b$, 
+\item $b < \frac{1}{2} < c$, and
+\item $c < \frac{1}{2}$.
+\end{enumerate}
+Let $R_i$ be the region in $\R^3$ corresponding to the $i^{th}$ condition.  Also, let $I_i$ be the integral over $R_i$ of the length of the peice that contains the $6$ inch mark (so $I_1 = \int_{R_1} adV$ for example).  Then the expected length is $\frac{I_1 + I_2 + I_3 + I_4}{V} = 6(I_1 + I_2 + I_3 + I_4)$.  It is easy to see that $I_1 = I_4$ and $I_2 = I_3$, so we only need to compute two integrals.
+
+And now, I will plug and chug:
+\begin{align*}
+I_1 & = \int_{1/2}^1 \int_a^1 \int_b^1 adcdbda \\
+& = \int_{1/2}^1 \int_a^1 (a-ab)dbda \\
+& = \int_{1/2}^1 \left(ab - \frac{ab^2}{2}\right|_a^1 da \\
+& = \int_{1/2}^1 \left(\frac{a}{2} - a^2 + \frac{a^3}{2}\right)da \\
+& = \left(\frac{a^2}{4} - \frac{a^3}{3} + \frac{a^4}{8}\right|_{1/2}^1 \\
+& = \frac{1}{4} - \frac{1}{3} +\frac{1}{8} - \frac{1}{16} + \frac{1}{24} - \frac{1}{128} \\
+& = \frac{96 - 128 + 48 - 24 + 16 - 3}{384} \\
+& = \frac{5}{384}
+\end{align*}
+and
+\begin{align*}
+I_2 & = \int_0^{1/2} \int_{1/2}^1 \int_b^1 (b-a)dcdbda \\
+& = \int_0^{1/2} \int_{1/2}^1 (b-a-b^2+ab)dbda \\
+& = \int_0^{1/2} \left(\frac{b^2}{2} - ab - \frac{b^3}{3} + \frac{ab^2}{2}\right|_{1/2}^1 da \\
+& = \int_0^{1/2} \left(\frac{1}{2} - a -\frac{1}{3} + \frac{a}{2} - \frac{1}{8} + \frac{a}{2} + \frac{1}{24} - \frac{a}{8}\right)da \\
+& = \int_0^{1/2} \left(\frac{1}{12} - \frac{a}{8}\right)da \\
+& = \left(\frac{a}{12} - \frac{a^2}{16}\right|_0^{1/2} \\
+& = \frac{1}{24} - \frac{1}{64} \\
+& = \frac{5}{192}.
+\end{align*}
+
+Thus, $I_1 + I_2 + I_3 + I_4 = \frac{5}{384} + \frac{5}{192} + \frac{5}{192} + \frac{5}{384} = \frac{5}{64}$, and so the expected length of the piece that contains the $6$-inch mark is $\frac{15}{32}$ feet, or $\frac{45}{8} = 5.625$ inches.
+
+For those of you who have had enough \sout{suffering} integration, this is a reasonable place to stop reading.  But one can ask more: what is the expected length of the piece that contains the point $x$ distance along the ruler (with $x$ measured in feet)?  Again, this breaks up into four cases: $x < a$, $ a < x < b$, $b < x < c$, and $c < x$.  Writing the integrals as $I_1(x)$, $I_2(x)$, $I_3(x)$, and $I_4(x)$, one has $I_4(x) = I_1(1-x)$ and $I_3(x) = I_2(1-x)$, so, again, we only need to compute two integrals.  And now, the \sout{suffering} integration:
+\begin{align*}
+I_1(x) & = \int_x^1 \int_a^1 \int_b^1 adcdbda \\
+& = \int_{x}^1 \int_a^1 (a-ab)dbda \\
+& = \int_{x}^1 \left(ab - \frac{ab^2}{2}\right|_a^1 da \\
+& = \int_{x}^1 \left(\frac{a}{2} - a^2 + \frac{a^3}{2}\right)da \\
+& = \left(\frac{a^2}{4} - \frac{a^3}{3} + \frac{a^4}{8}\right|_{x}^1 \\
+& = \frac{1}{4} - \frac{1}{3} + \frac{1}{8} - \frac{x^2}{4} + \frac{x^3}{3} - \frac{x^4}{8} \\
+& = \frac{1-6x^2 + 8x^3 - 3x^4}{24}
+\end{align*}
+and
+\begin{align*}
+I_2(x) & = \int_0^{x} \int_{x}^1 \int_b^1 (b-a)dcdbda \\
+& = \int_0^{x} \int_{x}^1 (b-a-b^2+ab)dbda \\
+& = \int_0^{x} \left(\frac{b^2}{2} - ab - \frac{b^3}{3} + \frac{ab^2}{2}\right|_{x}^1 da \\
+& = \int_0^x\left(\frac{1}{2} - a - \frac{1}{3} + \frac{a}{2} -\frac{x^2}{2} + ax + \frac{x^3}{3} - \frac{ax^2}{2}\right)da \\
+& = \int_0^x\left(\left(\frac{1-3x^2+2x^3}{6}\right) + \left(\frac{-1+2x-x^2}{2}\right)a\right)da \\
+& = \frac{x - 3x^3 + 2x^4}{6} + \frac{-x^2 + 2x^3 - x^4}{4} \\
+& = \frac{4x - 6x^2 + 2x^4}{24}.
+\end{align*}
+One also has $I_3(x) = I_2(1-x) = \frac{6x^2 - 8x^3 + 2x^4}{24}$ and $I_4(x) = I_1(1-x) = \frac{4x^3 - 3x^4}{24}$, and so their sum is $\frac{1 + 4x-6x^2+4x^3-2x^4}{24}$.  Since the expected length is $6$ times this sum, one gets that the expected length of the part of the ruler containing $x$ is $\frac{1 + 4x-6x^2+4x^3-2x^4}{4} = \frac{2-x^4-(1-x)^4}{4}$ feet, or $6 + 3x^4 + 3(1-x)^4$ inches.  Plugging in $x = 0$, one gets $\frac{1}{4}$, which makes sense, as that's just the expected length of one of the pieces chosen at random.  Plugging in $x = \frac{1}{2}$, one gets $\frac{15}{32}$, which is the same as before.  The graph of this function looks like this:
+
+\includegraphics{aug14graph.png}
+\end{document}

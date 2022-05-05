@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's September 24, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Andy Esposito, is about sport climbing:
+\begin{question}
+The finals of the sport climbing competition has eight climbers, each of whom compete in three different events: speed climbing, bouldering and lead climbing. Based on their time and performance, each of the eight climbers is given a ranking (first through eighth, with no ties allowed) in each event, as well as a corresponding score ($1$ through $8$, respectively).
+
+The three scores each climber earns are then multiplied together to give a final score. For example, a climber who placed second in speed climbing, fifth in bouldering and sixth in lead climbing would receive a score of $2\cdot5\cdot6$, or $60$ points. The gold medalist is whoever achieves the lowest final score among the eight finalists.
+
+What is the highest (i.e., worst) score one could achieve in this event and still have a chance of winning (or at least tying for first place overall)?
+\end{question}
+One has that the product of all the scores is $(8!)^3$, and so the geometric mean of all the scores is $(8!)^{3/8} \approx 53.34$.  Since all scores are integers, one must have that someone scores under that number.  Additionally, since any score is only divisible by primes less than $8$, the largest possible winning score is $50$.
+
+At this point, the strategy is to start working our way down until we find something that works.  If the winning score is $50$, one has that the geometric mean of the remaining scores is $\displaystyle{\left(\frac{(8!)^3}{50}\right)^{\frac{1}{7}}} \approx 53.83$.  Again, one must have an integer score less than this.  But, as noted above, $51, 52,$ and $53$ aren't valid scores.  Additionally, there aren't enough fifth places for someone else to score $50$.  Finally, since $50$ is winning, no smaller integers work, so we run into a problem.
+
+The same analysis, with more steps, works for $49$.  There must be a score less than $\displaystyle{\left(\frac{(8!)^3}{49}\right)^{\frac{1}{7}}} \approx 53.99$, and $49$ isn't valid, so someone must score $50$.  Among the remaining six players, one must score no more than $\displaystyle{\left(\frac{(8!)^3}{49\cdot50}\right)^{\frac{1}{6}}} \approx 54.69$.  This time, $54$ is valid, so among the remaining scores, there must be one that is at most $\displaystyle{\left(\frac{(8!)^3}{49 \cdot 50\cdot 54}\right)^{\frac{1}{5}}} \approx 54.83$.  But the only way to get a score of $54$ is to get two thirds and a sixth, so there is no way to get a second score of $54$, and we run out of numbers.
+
+As for $48$, there is a big difference here: it is now possible for multiple people to score $48$ and not run into issues with prime divisors of $(8!)^3$.  In particular, $48^5|(8!)^3$, so we could have five people score $48$, and the remaining people have to cobble together a score of $2\cdot3\cdot5^3\cdot 7^3$, which is entirely possible.  The most likely way that this would work out is if there were one first, second, and third place left, as well as all the fifth and seventh places left among the three people that don't score $48$.
+
+After a little tinkering, one gets that one possible set of scores is as follows: five people score $48$, one person scores $49 = 1\cdot7 \cdot 7$, one person scores $70 = 2\cdot 5\cdot 7$, and one person scores $75 = 3\cdot 5\cdot 5$.  At this point one needs to break down the five $48$s, and one sees that two people get $1 \cdot 6 \cdot 8$, one person gets $2\cdot3\cdot8$, one person gets $2\cdot4\cdot6$, and one person gets $3\cdot4\cdot4$, which gives each place exactly three people that attain it.  Now, one needs to distribute these scores, and the following works:
+
+\begin{tabular}{|c|c|c|}
+\hline
+1 & 6 & 8 \\\hline
+6 & 8 & 1 \\\hline
+8 & 2 & 3 \\\hline
+2 & 4 & 6 \\\hline
+4 & 3 & 4 \\\hline
+7 & 1 & 7 \\\hline
+5 & 7 & 2 \\\hline
+3 & 5 & 5 \\\hline
+\end{tabular}
+
+One can see that each column has all the integers from $1$ to $8$, and the scores are five $48$s followed by $49$, $70$, and $75$, so this means that it is possible to tie for first with a score of $48$.
+
+But what about winning outright?  A similar, but much more tedious version of the above analysis shows that you cannot win outright with a score of $48$.  It is not too hard to see that you can win outright with $45$: three people place first, seventh, and eighth, three people place second, fourth, and sixth, one person places third, fifth, and fifth, and one person places third, third, and fifth.  It is straightforward to distribute these scores so that they line up with a valid score.
+
+In summary: the highest score that can still tie for first is $48$ which requires an absurd five-way tie, and the highest score that can win outright is $45$.
+\end{document}

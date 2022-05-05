@@ -1,0 +1,85 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's July 17, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+ 
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Jason Shaw, asks about a race between a tortoise and a hare:
+\begin{question}
+The tortoise and the hare are about to begin a 10-mile race along a ``stretch'' of road. The tortoise is driving a car that travels 60 miles per hour, while the hare is driving a car that travels 75 miles per hour. (For the purposes of this problem, assume that both cars accelerate from 0 miles per hour to their cruising speed instantaneously.)
+
+The hare does a quick mental calculation and realizes if it waits until two minutes have passed, they’ll cross the finish line at the exact same moment. And so, when the race begins, the tortoise drives off while the hare patiently waits.
+
+But one minute into the race, after the tortoise has driven 1 mile, something extraordinary happens. The road turns out to be magical and instantaneously stretches by 10 miles! As a result of this stretching, the tortoise is now 2 miles ahead of the hare, who remains at the starting line.
+
+At the end of every subsequent minute, the road stretches by 10 miles. With this in mind, the hare does some more mental math.
+
+How long after the race has begun should the hare wait so that both the tortoise and the hare will cross the finish line at the same exact moment?
+\end{question}
+
+Define $f(n, x)$ (where $n$ is a nonnegative integer, and $x \in [0, 1)$) to be the fraction of the road that the tortoise has traversed after $n + x$ minutes, and $g(n, x, m, y)$ ($n, m$ are nonnegative integers and $x, y \in [0,1)$) to be the fraction of the road that the hare has traversed after $n+x$ minutes, given that she waited for $m+y$ minutes before starting.  Now, one sees that $f(n, x) = \frac{1}{10}(H_n + \frac{x}{n+1})$ (here, $H_n = \sum_{k=1}^{n} \frac{1}{k}$ is the $n^{th}$ harmonic number) and $g(n, x, m, y) = \frac{1}{8}(H_n + \frac{x}{n+1} - H_m -\frac{y}{m+1})$.
+
+Since $f(n, x)$ is a strictly increasing function of $n+x$, there exists a unique pair $(n_0, x_0)$ such that $f(n_0, x_0) = 1$.  We want to find $m_0, y_0$ such that $g(n_0, x_0, m_0, y_0) = 1$ as well.  But notice that $g(n, x, m, y) = \frac{5}{4}(f(n, x) - f(m, y))$, so $g(n_0, x_0, m_0, y_0) = 1$ implies that $\frac{5}{4}(1-f(m_0, y_0)) = 1$, or $f(m_0, y_0) = \frac{1}{5}$.  Thus, one has $H_{m_0} + \frac{y_0}{m_0+1} = 2$.  One can quickly see that $H_3 = \frac{11}{6}$ and $H_4 = \frac{25}{12}$, so $m_0 = 3$ and then it's easy to get $y_0 = \frac{2}{3}$, so the hare should wait for $3$ minutes and $40$ seconds to exactly tie the tortoise.
+
+How long does the race take?  Well, one can look to find the first harmonic number larger than $10$.  While probably possible to do by hand, this is also in the OEIS, and the answer is $12367$, so the race takes just over $12366$ minutes, or $8$ days, $14$ hours, and $6$ minutes!  If the hare had not waited around, she would finish in just over $1674$ minutes, or just under $1$ day and $4$ hours.  If she had instead started once she saw the road expand the first time, she would finish in $4551$ minutes, or just under $3$ days and $4$ hours.  The lesson is to not put off things that are going to grow exponentially. 
+\end{document}

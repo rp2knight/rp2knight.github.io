@@ -1,0 +1,125 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's April 22, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Jenny Mitchell, is about leveling up in an MMO:
+\begin{question}
+In the hit online game World of Riddlecraft, players can level up their armor. Armor levels range from $0$ to $5$. Now, attempting to level up your armor requires a cerulean gem, which is destroyed in the process. If the attempt is successful, your armor’s level goes up by one; if not, it goes down by one.
+
+Fortunately, it’s impossible to fail when attempting to upgrade your armor from level $0$ to level $1$. However, the likelihood of success goes down the higher level the armor is before the upgrade. More specifically:
+\begin{itemize}
+\item Upgrading from level $0$ to level $1$ has a $100$ percent chance of success.
+\item Upgrading from level $1$ to level $2$ has an $80$ percent chance of success.
+\item Upgrading from level $2$ to level $3$ has a $60$ percent chance of success.
+\item Upgrading from level $3$ to level $4$ has a $40$ percent chance of success.
+\item Upgrading from level $4$ to level $5$ has a $20$ percent chance of success.
+\end{itemize}
+On average, how many cerulean gems can you expect to use up in order to upgrade your armor from level $0$ to level $5$?
+\end{question}
+I'm going to make this question a little more general: Assume your armor goes up to level $n$, and the odds of a sucessful upgrade when it's at level $k$ is $\frac{n-k}{n}$.  How many gems, on average, does it take to get to level $k$ to level $n$?
+
+Define a function $f_n(k)$ to be the expected number of gems it takes to get to level $n$ from level $k$.  Then it is easy to see that:
+\begin{align*}
+f_n(n) & = 0, \\
+f_n(0) & = f_n(1) + 1, \text{ and} \\
+f_n(1) & = \frac{n-k}{n} f_n(k+1) + \frac{k}{n} f_n(k-1) + 1.
+\end{align*}
+Define a function $g_n(k)$ by $f_n(k) = f_n(k+1) + g_n(k)$ (this makes the second condition above be that $g_n(0) = 1$).  Then one can easily compute:
+\begin{align*}
+n f_n(k) & =(n-k) f_n(k+1) + k f_n(k-1) + n \\
+& = (n-k) f_n(k+1) + k(f_n(k) + g_n(k-1)) + n \\
+(n-k) f_n(k) & = (n-k) f_n(k+1) + kg_n(k-1) + n \\
+f_n(k) & = f_n(k+1) + \frac{k g_n(k-1) + n}{n-k}\\
+g_n(k) & = \frac{kg_n(k-1) + n}{n-k}
+\end{align*}
+This gives a nice recursive formula for $g_n(k)$, and allows one to compute values\footnote{$f_n(0)$ is just the sum of the values of all of the $g_n(k)$s}:
+
+\begin{tabular}{c||c|c|c|c|c|c||c|}
+& 0 & 1 & 2 & 3 & 4 & 5 & $f_n(0)$\\
+\hline
+\hline
+1 & 1 & & & & & & 1\\ \hline
+2 & 1 & 3 & & & & & 4\\ \hline
+3 & 1 & 2 & 7 & & & & 10\\ \hline
+4 & 1 & 5/3 & 11/3 & 15 & & & 64/3 \\ \hline
+5 & 1 & 3/2 & 8/3 & 13/2 & 31 & & 128/3\\ \hline
+6 & 1 & 7/5 & 11/5 & 21/5 & 57/5 & 63 & 416/5 \\ \hline
+\end{tabular}
+
+An interesting note: $\frac{g_n(n-1)}{f_n(0)}$ never gets below $.7$ and is trending back up by the time that $n = 6$.  In some sense, most of the work is done getting the final level!
+
+Finally, I would like to share two interesting reformulations of this problem:
+\begin{enumerate}
+\item You have a string of $n$ bits, that all start at $0$.  Every step, you flip a bit chosen uniformly at random.  How many flips does it take to get to all $1$s?
+\item You have an $n$-dimensional cube, and start at one corner.  Every step, you move along an edge you can chosen uniformly at random.  How many steps does it take to get to the opposite corner of the cube?
+\end{enumerate}
+The equivalence between the original formulation and the first one above is by defining the level to be the sum of the bits.  The equivalence of the first and second one is by turning the string of bits into a point in $\mathbb{R}^n$ and then the set of all such strings becomes a cube.  I have no meaningful way to use this observation, but it sure is neat!
+\end{document}

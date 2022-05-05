@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's July 31, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+ 
+\begin{document}
+\maketitle
+This weeks riddler, courtesy of Dave Moran, is about functions on $\Z/n\Z$:
+\begin{question}
+Find the smallest $n > 100$ such that there doesn't exist a function $f: \Z/n\Z$ such that
+\begin{itemize}
+\item $f$ is a permutation,
+\item $f(x) = x$ implies $x = 0$, and
+\item $f(x_1) - f(x_2) \neq x_1-x_2$ for all $x_1 \neq x_2 \in \Z/n\Z$.
+\end{itemize}
+\end{question}
+The motivation is about a class standing in a circle in a maximally disordered state.
+
+Let's assume that $f$ is a function that satisfies the conditions in the question.  Notice first that, if $g: \Z/n\Z \rightarrow \Z/n\Z$ is defined by $g(x) = f(x) - x$, then $g$ is also a permutation ($g(x_1) = g(x_2)$ can be easily rearanged to $f(x_1) - f(x_2) = x_1-x_2$).  Also, notice that $\displaystyle{\sum_{x \in \Z/n\Z} f(x) = \sum_{x \in \Z/n\Z} x = \frac{n(n+1)}{2}}$ (the first equality is because $f$ is just rearranging the elements of $\Z/n\Z$), and the same is true for $g$ because $g$ is also a permutation.  But one also has that $\displaystyle{\sum_{x \in \Z/n\Z} g(x) = \sum_{x \in \Z/n\Z} f(x) - \sum_{x \in \Z/n\Z} x = 0}$.  Thus, one must have that $\frac{n(n+1)}{2} = 0$ in $\Z/n\Z$.  Thus, if such a function exists, then $n$ cannot be even, as $\frac{n(n+1)}{2} = \frac{n}{2} \neq 0$ in $\Z/n\Z$.
+
+Now, one can easily see that, if $n$ is odd, then $f(x) = 2x$ satisfies all of the criteria for the question.  Thus, one gets that the set of all $n$ such that there does not exist such a function is exactly the set of all even $n$.  In particular, the minimum value of $n$ greater than $100$ is $102$.
+\end{document}

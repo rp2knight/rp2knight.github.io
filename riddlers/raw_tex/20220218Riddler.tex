@@ -1,0 +1,106 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's February 18, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+
+This week's riddler, courtesy of Gary Yane, is about forcing a coin to become lucky:
+\begin{question}
+I have in my possession $1$ million fair coins. Before you ask, these are not legal tender. Among these, I want to find the ``luckiest'' coin.
+
+I first flip all $1$ million coins simultaneously (I'm great at multitasking like that), discarding any coins that come up tails. I flip all the coins that come up heads a second time, and I again discard any of these coins that come up tails. I repeat this process, over and over again. If at any point I am left with one coin, I declare that to be the ``luckiest'' coin.
+
+But getting to one coin is no sure thing. For example, I might find myself with two coins, flip both of them and have both come up tails. Then I would have zero coins, never having had exactly one coin.
+
+What is the probability that I will - at some point - have exactly one ``luckiest'' coin?
+\end{question}
+Let $p(n)$ be the probability that Gary has a lucky coin, given that he starts with $n$ coins.  We want to compute $p(1000000)$.
+
+One sees from the definition that $p(0) = 0$ and $p(1) = 1$\footnote{Sadly, the obvious continuation of this doesn't work}.  For $n \geq 2$, one has that $p(n) = \displaystyle{\sum_{k = 0}^{n} \binom{n}{k}\frac{f(k)}{2^k}}$, or that $p(n) = \displaystyle{\sum_{k = 0}^{n-1} \binom{n}{k}\frac{f(k)}{2^k-1}}$.  This formula lets one recursively compute $p(n)$, and doing so in python shows that the values seem to stablize at a number that is roughly $.72135$.
+
+I have no further insight into this; I tried to solve this recursion and got absolutely nowhere.  I'll conclude with my code:
+\begin{verbatim}
+import math
+
+##This computes the values of p(n) up to top, with
+##values being the, well, values.
+
+values = [0, 1]
+top = 1000
+
+for n in range(2, top):
+    s = 0
+    for k in range(n):
+        s += values[k]*math.comb(n, k)/(2**n-1)
+    values.append(s)
+
+print(values)
+\end{verbatim}
+\end{document}

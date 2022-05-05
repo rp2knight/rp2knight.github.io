@@ -1,0 +1,109 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's January 15, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+Today's riddler, courtesy of Barbara Yew is a number puzzle:
+\begin{question}
+In the following grid, one fills each blank square with a single digit number.  The goal is to have the products along each column equal the number in the box below the column and the product of the numbers along each row equal the number at the end of the row.
+\end{question}
+\begin{center}
+\begin{tabular}{|c|c|c||c|}
+\hline
+ & & & 294 \\ \hline
+& & & 216 \\ \hline
+& & & 135 \\ \hline
+& & & 98 \\ \hline
+& & & 112 \\ \hline
+& & & 84 \\ \hline
+& & & 245 \\ \hline
+& & & 40 \\ \hline \hline
+8890560 & 156800 & 55566 & \\ \hline
+\end{tabular}
+\end{center}
+There isn't that much insightful to say about how to solve this; you just factor everything and start ruling possibilities out as you go (factorizations of the bottom numbers because that isn't immediate: $8890560 = 2^6\cdot3^4\cdot5\cdot7^3$, $156800 = 2^7\cdot5^2\cdot7^2$, and $55566 = 2\cdot3^4\cdot7^3$).  When you can't make a positive deduction, you just start guessing on specific cells that have few choices and see what happens.  The solution will be on the next page just to avoid spoilers for those that want to.
+\newpage
+And now, the solution:
+\begin{center}
+\begin{tabular}{|c|c|c||c|}
+\hline
+7 & 7 & 6 & 294 \\ \hline
+9 & 8 & 3 & 216 \\ \hline
+9 & 5 & 3 & 135 \\ \hline
+7 & 2 & 7 & 98 \\ \hline
+8 & 2 & 7 & 112 \\ \hline
+7 & 4 & 3 & 84 \\ \hline
+5 & 7 & 7 & 245 \\ \hline
+8 & 5 & 1 & 40 \\ \hline \hline
+8890560 & 156800 & 55566 & \\ \hline
+\end{tabular}
+\end{center}
+\end{document}

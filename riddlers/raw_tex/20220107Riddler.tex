@@ -1,0 +1,125 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's Janurary 7, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler is a geometry challenge:
+\begin{question}
+Amare the ant is traveling within Triangle $ABC$. Angle $A$ measures $15$ degrees, and sides $AB$ and $AC$ both have length $1$.
+
+Amare starts at point $B$ and wants to ultimately arrive on side $AC$. However, the queen of his colony has asked him to make several stops along the way. Specifically, his path must:
+\begin{itemize}
+\item Start at point B.
+\item Second, touch a point on side $AC$
+\item Third, touch a point back on side $AB$.
+\item Finally, touch a point on $AC$.
+\end{itemize}
+What is the shortest distance Amare can travel to appease the bizzare queen?
+\end{question}
+
+There is a very short answer that I will present shortly.  However, I did five 5 pages of calculus before coming up with that solution so I feel obliged to share this with you.
+
+I will solve the problem where Amare goes from $B$ to $AC$ to $AB$ and stops there, as that is a building block to getting the three stop problem.  It is clear that once Amare touches side $AC$, his best path is to travel straight down to the edge $AB$.  Let $p$ be a point on the edge $AC$ (actually, it's better to think of this as a point in $\R^2$ for reasons that will become apparent shortly), and define $d_1$ to be the distance to $B$, and $d_2$ to be the distance to $AB$.  I will view $d_1$ and $d_2$ as functions of $p$.  One has that $\nabla d_1$ is the unit vector in the direction from $B$ to $p$, and $\nabla d_2 = (0, 1)$, the unit vector pointing straight up.
+
+To figure out where on $AC$ Amare should go, let $v$ be a vector parellel to $AC$.  At the correct point, one has that $v\cdot(\nabla d_1 + \nabla d_2) = 0$ (as that is just setting the directional derivative to $0$).  Since $\nabla d_1$ and $\nabla d_2$ are both unit vectors, the only relevant thing is that the angle between $Bp$ and $v$ is equal to the angle between $v$ and $(0, -1)$; a quick calculation shows that this gives the angle between $AB$ and $Bp$ is $60^\circ$.
+
+To see a picture, the optimal path is as follows:
+
+\begin{tikzpicture}[scale=15]
+\draw[gray, thick] (1, 0) node[below right]{B} -- (0, 0) node[below left]{A} -- ({sqrt(2+sqrt(3))/2}, {sqrt(2-sqrt(3))/2}) node[above]{C} -- (1, 0);
+\draw[blue, thick] (1, 0) -- ({sqrt(3)/2}, {(sqrt(12)-3)/2}) node[above right]{p} -- ({sqrt(3)/2}, 0);
+\draw[blue, dashed, thick] ({sqrt(3)/2}, {(sqrt(12)-3)/2}) -- (.8, {sqrt(3)/5});
+\draw[gray, thick] ({sqrt(3)/2}, {(sqrt(12) - 3)/2 - .05}) arc (270:120:.05);
+\end{tikzpicture}
+
+This image leads one to imagine AC as a mirror.  Drawing a reflected triangle across AC, one instantly sees what's really going on:
+
+\begin{tikzpicture}[scale=15]
+\draw[gray, thick] (1, 0) node[below right]{B} -- (0, 0) node[below left]{A} -- ({sqrt(2+sqrt(3))/2}, {sqrt(2-sqrt(3))/2}) node[above right]{C} -- (1, 0);
+\draw[gray, thick] (0, 0) -- ({sqrt(3)/2)}, .5) node[above]{B'} --  ({sqrt(2+sqrt(3))/2}, {sqrt(2-sqrt(3))/2});
+\draw[blue, thick] (1, 0) -- ({sqrt(3)/2}, {(sqrt(12)-3)/2}) node[above right]{p} -- ({sqrt(3)/2}, 0);
+\draw[blue, dashed, thick] ({sqrt(3)/2}, {(sqrt(12)-3)/2}) -- (.75, {sqrt(3)/4});
+\end{tikzpicture}
+
+The fastest path for Amare is to just go directly to AB'.
+
+For the three-step version (i.e. what was actually asked for), it's no surprise that you just draw another triangle reflected about AB', and go directly to AC':
+
+\begin{tikzpicture}[scale=15]
+\draw[gray, thick] (1, 0) node[below right]{B} -- (0, 0) node[below left]{A} -- ({sqrt(2+sqrt(3))/2}, {sqrt(2-sqrt(3))/2}) node[above right]{C} -- (1, 0);
+\draw[gray, thick] (0, 0) -- ({sqrt(3)/2)}, .5) node[above right]{B'} --  ({sqrt(2+sqrt(3))/2}, {sqrt(2-sqrt(3))/2});
+\draw[gray, thick] (0, 0) -- ({sqrt(2)/2}, {sqrt(2)/2}) node[above]{C'} -- ({sqrt(3)/2)}, .5);
+\draw[blue, thick] (1, 0) -- ({(3 + sqrt(3))/6}, {(3-sqrt(3))/6}) -- ({(sqrt(3)-1}, 0) -- ({(1+sqrt(3))/4}, {(sqrt(3)-1)/4});
+\draw[blue, dashed, thick] ({(3 + sqrt(3))/6}, {(3-sqrt(3))/6}) -- (.5, .5);
+\draw[blue, dashed, thick] ({(3-sqrt(3))/2},{(sqrt(3)-1)/2}) --  ({(1+sqrt(3))/4}, {(sqrt(3)-1)/4});
+\end{tikzpicture}
+
+With this picture, it's immediately apparent that Amare moves $\frac{\sqrt{2}}{2}$ units, as the point of intersection on $AC'$ is $(\frac12, \frac12)$.
+\end{document}

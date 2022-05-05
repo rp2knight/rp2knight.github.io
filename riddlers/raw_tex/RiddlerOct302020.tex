@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's October 30, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+This week's riddler, from Ricky Jacobson, is about a simple little party game:
+\begin{question}
+Instead of playing hot potato, you and 60 of your closest friends decide to play a socially distanced game of hot pumpkin.
+
+Before the game starts, you all sit in a circle and agree on a positive integer $N$. Once the number has been chosen, you (the leader of the group) start the game by counting ``$1$'' and passing the pumpkin to the person sitting directly to your left. She then declares ``$2$'' and passes the pumpkin one space to her left. This continues with each player saying the next number in the sequence, wrapping around the circle as many times as necessary, until the group has collectively counted up to $N$. At that point, the player who counted ``$N$'' is eliminated, and the player directly to his or her left starts the next round, again proceeding to the same value of $N$. The game continues until just one player remains, who is declared the victor.
+
+In the game’s first round, the player $18$ spaces to your left is the first to be eliminated. Ricky, the next player in the sequence, begins the next round. The second round sees the elimination of the player $31$ spaces to Ricky’s left. Zach begins the third round, only to find himself eliminated in a cruel twist of fate. (Woe is Zach.)
+
+What was the smallest value of $N$ the group could have used for this game?
+
+Extra credit: Suppose the players were numbered from $1$ to $61$, with you as Player No. $1$, the player to your left as Player No. $2$ and so on. Which player won the game?
+
+Extra extra credit: What’s the smallest N that would have made you the winner?
+\end{question}
+One can get three congruence conditions on $N$ out of the problem.  In particular, one knows that $N \equiv 19 \pmod{61}$, $N \equiv 32 \pmod{60}$, and $N \equiv 1 \pmod{59}$.  Since $61$, $60$, and $59$ are all pairwise coprime, the chinese remainder theorem guarantees that there is an integer $N \pmod{61\cdot 60\cdot 59}$ that satisifies all of these congruence conditions.
+
+In order to find that integer, one needs to find the ``fundamental idempotents,'' that is, three numbers $i_1$, $i_2$, and $i_3$ such that $i_1 \equiv 1\pmod{60}$ and $i_1 \equiv 0 \pmod{60\cdot59}$ (and similarly for $i_2$ and $i_3$).  This, in turn, is reduced to finding a mulciplicative inverse of $60\cdot59\pmod{61}$.  But $60\cdot59\equiv 2\pmod{61}$, so the multipliciative inverse is $31$.  One then gets $i_1 = 60\cdot59\cdot31 = 109740$.  Similarly, one gets $i_2 = 61\cdot 59 \cdot 59 = 212341$ and $i_3 = 61\cdot60\cdot30 = 109800$.  Now, one then gets that $N \equiv 19i_1 + 32i_2 + i_3 = 8989772 \pmod{61\cdot60\cdot59}$, and the smallest integer that is congruent to that $\pmod{61\cdot60\cdot59}$ is $136232$.  A rather large number leading to the game taking a while.
+
+This is ultimately the Josephus problem, and if one lets $f(k, N)$ denote the winner if there are $k$ people in the circle and $N$ is how many times around the circle the pumpkin goes, one has that $f(k, N) = ((f(k-1, N)+N-1) \pmod{k}) + 1$ (after the first person gets eliminated, you are now in a circle of size $k-1$, and everything has shifted by $N$.  At this point, it is much easier to hit everything with code:
+\begin{verbatim}
+##This is the Josephus computation.  f(k, N) gives
+##the winner of the game if there are k people in
+##the game and the chosen value of N is, uh, N. 
+def f(k, N):
+    if (k == 1):
+        return(1)
+    return(((f(k-1, N)+N-1) % k) + 1)
+
+##This solves the first extra credit.
+print(f(61, 136232))
+
+##This solves the second extra credit if one inteprets
+##it as just the first value of N where player 1 wins.
+found = False
+i = 1
+
+while(found == False):
+    if(f(61, i) == 1):
+        print(i)
+        found = True
+    i+=1
+
+##This solves the second extra credit if one interprets
+##it as the first value where the events in the problem
+##transpire and player one wins.
+found = False
+i = 0
+
+while(found == False):
+    if(f(61, 136232+(i*61*60*59)) == 1):
+        print(i, 136232+(i*61*60*59))
+        found = True
+    i+=1
+\end{verbatim}
+This gives person number $58$ as the winner for the game with $N = 136232$, the smallest value of $N$ where you win is $140$, and that the smallest value of $N$ where the events described in the problem transpire and you win is $42892352$.
+\end{document}

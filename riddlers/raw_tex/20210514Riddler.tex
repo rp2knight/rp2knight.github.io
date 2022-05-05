@@ -1,0 +1,109 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's May 7, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Matt Yeager, is a puzzle about a game:
+\begin{question}
+Three of Matt’s students - Players A, B and C - are engaged in a game of veinte. In each round, players take turns saying numbers in order (Player A, then B, then C, then A again, etc.). The first player to go says the number ``$1$.'' Each number must be either one, two, three or four more than the number said by the previous player. When someone says ``$20$,'' the round is over and the next person is eliminated, with the following person beginning the subsequent round. For example, if Player A says ``$20$,'' then Player B is eliminated, while Player C begins the next round by saying ``$1$.'' At no point can anyone say a number greater than $20$.
+
+All three players want to be the winner (i.e., the only player remaining) after the two rounds. But if they realize they can’t win, then they will prioritize making it to the second round.
+
+Player A starts things off by saying ``1.'' Which player will win?
+
+\emph{Extra Credit}: What if there are four players (A, B, C, and D)?
+\end{question}
+
+Let's start with the two-player game, where I will assume that player A is the first to go and they're playing against player B.  Player B can win no matter what player A does by naming $5$, $10$, $15$, and $20$ in their turns, and there is nothing player A can do to stop that.
+
+Thus, if player B wins (names $20$) the first game, then player C is eliminated, and player A starts the second game, meaning that if you win the first game you also win the second game.  That tells us what happens if some numbers are named: if player A manages to name $20$, then they win.  If they name any number between $16$ and $20$, player B wins, but player A at least makes it to the second round.
+
+What if player A names $15$?  Then player B cannot win, but must let player C win.  Therefore, if player A names $15$, not only do they not win, but they don't even make it to the second round.  Similarly, if player A names $14$, then player B is faced with deciding between letting player C win immediately by naming something between $16$ and $18$, or letting player A win by naming $15$.  But player B will not name $15$ as that gets them eliminated in the first round, so player B will let player C win and player A will be eliminated.  For similar reasons, if player A names $13$ or $12$, then they will be eliminated in the first round.
+
+Now, we reach $11$.  If player A names $11$, player B must name something between $12$ and $15$.  At this point player C has no better option than to let player A win.  Therefore, if player A names $11$, they win!
+
+And now it repeats: if player A names anything between $7$ and $10$, player B wins by naming $11$.  If player A names anything between $3$ and $6$, player B cannot win, but will let player C win, so player A gets eliminated in the first round.  If player A names $2$, then they win, and so on.
+
+Thus, in the three-person game, player B names $2$ and will win eventually.
+
+Now we start the same analysis for the four person game: assume A names $20$.  Then B gets eliminated, C starts the second round, D wins the second round (and thus the whole game), and A gets eliminated in the second round.
+
+Now, if A names $19$, B has no choice but to name $20$.  Then C gets eliminated, D starts the next round, and A wins overall.  So $19$ is a winning number.
+
+Consequently, if A names anything between $15$ and $18$, B will name $19$ and win eventually.  If B names $19$, D gets eliminated in the first round, C gets eliminated in the second round, and A gets eliminated in the third round.  Thus, naming any number between $15$ and $18$ gets A eliminated in the third round.
+
+Now, if A names $14$, B must let C name $19$, which forces $D$ to name $20$ and eliminate A.  Similarly, if A names anything between $11$ and $13$, B would rather let C name $19$ than let D name $19$, meaning A gets eliminated in the first round if they name anything between $11$ and $14$.
+
+And now we reach $10$.  If A names $10$, B has to name something between $11$ and $14$.  Then C's best option is to let D name $19$, which forces A to name $20$, eliminate B, and get eliminated in the second round.
+
+If A names $9$, B would much rather name $10$ than anything between $11$ and $13$ as that keeps B alive for another round.  Thus, if A names $9$, B eventually names $20$, making A the winner of the whole game!  Thus, $9$ is another winning number, and the pattern repeats: $5$ to $8$ lose in the third round, and $1$ to $4$ lose immediately.
+
+Thus, if player A names $1$, player B names $5$, and player C names $9$ and wins.  Therefore, in the four-person game, player A gets eliminated in the first round, player D gets eliminated in the second round, player B gets eliminated in the third round, and player C wins.  Player A just can't seem to catch a break!
+\end{document}

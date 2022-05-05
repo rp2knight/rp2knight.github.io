@@ -1,0 +1,86 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's March 19, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Scott Matlick, is about square numbers:
+\begin{question}
+$16$ is a square number, such that, when you remove the last digit of it, it remains square.  The next few numbers that do this are $49, 169, 256,$ and $361$.  Can you find the next three such numbers?
+
+\emph{Extra Credit}: $169$ has the property that when you remove either the last digit or the last two digits, you get a square number each time.  Can you find another square with this property?
+\end{question}
+Disclaimer: one interpretation of the question considers a zero-digit number to be $0$ (assume that every number has infinitely many leading $0$s), so that $1$, $4$, and $9$ are also numbers with the property listed (remove the last digit and get a square).  Additionally, one gets that $1$, $4$, $9$, $16$, and $49$ all solve the extra credit.  I will not ascribe to this interpretation throughout the rest of this solution.
+
+Ironically, the extra credit is easier than the main question.  Assume that $x^2$, $y^2$, and $z^2$ are the three squares that come up in the extra credit.  Then one has that $0 < x^2 - 10y^2 < 10$ and $0 < y^2 - 10z^2 < 100$, and so $0 < x^2 - (10z)^2 < 100$.  Since $x > 10z$, one has that $20z < x + 10z < x^2-(10z)^2 < 100$ and so $z < 5$.  One can therefore check all squares of the forms $1ab$, $4ab$, $9ab$, and $16ab$, and it becomes quickly apparent that $169$ is the only such square.
+
+On to the main question.  Write $x^2$ and $y^2$ for the two squares.  One has that $0 < x^2-10y^2 < 10$.  It is easy to see that therea re at most five possibilities for $x^2-10y^2$: $1, 4, 5, 6,$ and $9$.  However, if the last digit of $x^2$ is $5$, then the second to last digit is $2$ and so $y^2$ is a square that ends in $2$.  Thus, one only needs to find all solutions to $x^2-10y^2 \in \{1, 4, 6, 9\}$.  Using the arithmatic of $\Z[\sqrt{10}]$, one has that, if $x$ and $y$ are a solution to $x^2-10y^2 = 1$, then $x+y\sqrt{10} = (19+6\sqrt{10})^n$ for some $n > 0$.  Similarly, one has that solutions to $x^2 - 10y^2 = 4$ come from $x+y\sqrt{10} = 2(19+6\sqrt{10})^n$ for some $n > 0$.  Additionally, solutions to $x^2 - 10y^2 = 6$ come from $x+y \sqrt{10} = (4+\sqrt{10})(19+6\sqrt{10})^n$ or $(16+5\sqrt{10})(19+6\sqrt{10})^n$ for some $n \geq 0$.  Finally, solutions to $x^2 - 10y^2 = 9$ come from $x+y \sqrt{10} = (7+2\sqrt{10})(19+6\sqrt{10})^n$, $x+y \sqrt{10} = (13+4\sqrt{10})(19+6\sqrt{10})^n$, or $x+y \sqrt{10} = 3(19+6\sqrt{10})^n$, where in the first two instances, one has $n \geq 0$ and in the last one one has $n > 0$.
+
+One gets that the next three examples are $38^2 -10\cdot 12^2 = 4$, $57^2 - 10 \cdot 18^2 = 9$, and $136^2 - 10 \cdot 43^2 = 6$.  The two after that are $253^2 - 10\cdot 80^2 = 9$ and $487^2 - 10\cdot 154^2 = 9$.  You can generate all of the solutions with this process.
+\end{document}

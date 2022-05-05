@@ -1,0 +1,118 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's April 29, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler is about a dull basketball game:
+\begin{question}
+The New York Nicks are facing off against the Brooklyn Naughts. Throughout the entire game, the two teams alternate possession, starting with the Nicks, until both teams have had exactly $100$ possessions. For simplicity, assume that each team scores either $0$ points or $2$ points with each possession. (So don’t worry about $3$-pointers, fouls, etc.)
+
+Whenever the game is tied, the team that currently has possession has a $.5$ chance of scoring $2$ points. When the game is not tied, the team that is in the lead takes it easy and the team that is behind is more motivated to score. In this case, assume that the team that is behind has a $.5+x$ chance of scoring, while the team that is ahead has a $.5-x$ chance of scoring. Here, $x$ is a positive number that is greater than $0$ and less than $.5$.
+
+In preparation for the game, the official scorekeeper (who knows the value of $x$) crunched the numbers and realized the game has a $50$ percent chance of being tied at the end of regulation.
+
+In the event that the game is not tied at the end of regulation, what is the probability that each team wins?
+\end{question}
+First of all, since both teams can only score in increments of two points, there is no reason to bother with that and just assume each team scores in increments of one.
+
+Before working this problem, I will work out what happens in the much simpler case when $x = .5$.  It is easy to see that, after $k$ possessions, the team that last took a shot is either tied or up by $1$.  Let $a_k$ be the probability that they are up by $1$.  Then one has that $a_{k+1} = \frac{1-a_k}{2}$ (in order to lead by $1$ after your shot, you need the game to be tied and you need to score).  Then one solves and gets that $a_k = \frac{1}{3}- \frac{(-1)^k}{3\cdot2^k}$.
+
+The key observation here is that, not only does $a_k$ tend to $\frac{1}{3}$, but it does so extremely quickly.  If one imagines a stable state $a_\infty$, then $a_\infty = \frac{1-a_\infty}{2}$, and this is pretty close to computing $a_{200}$.  Consequently, I will assume that we are in the stable state to solve this problem.
+
+Assume $x$ is fixed, and let $a = 1-2x$ and $b = 1 + 2x$.  Define $p_n$ to be the probability that the last team to shoot has a net score of $n$.  Then one has the following equations defining the $p_n$s:
+\begin{align*}
+&  \vdots \\
+2p_3 & = bp_{-3} + ap_{-2} \\
+2p_2 & = bp_{-2} + ap_{-1} \\
+2p_1 & = bp_{-1} + p_0 \\
+2p_0 & = p_{0} + bp_{1} \\
+2p_{-1} & = ap_1 + bp_2 \\
+2p_{-2} & = ap_2 + bp_3 \\
+& \vdots
+\end{align*}
+
+Now, we assume that $p_0 = \frac{1}{2}$.  Then one can start computing more values from these equations:
+\begin{align*}
+2p_0 & = p_0 + bp_1 \\
+\frac{1}{2} & = bp_1 \\
+\frac{1}{2b} & = p_1 \\
+2p_1 & = bp_{-1} + p_0 \\
+\frac{1}{b} - \frac{1}{2} & = bp_{-1} \\
+\frac{a}{2b} & = bp_{-1} \\
+\frac{a}{2b^2} & = p_{-1} \\
+2p_{-1} & = ap_1 + bp_2 \\
+\frac{a}{b^2}-\frac{a}{2b} & = bp_2 \\
+\frac{a^2}{2b^2} & = bp_2 \\
+\frac{a^2}{2b^3} & = p_2
+\end{align*}
+And this pattern continues.  In general, $a_0 = \frac{1}{2}$, $a_n = \frac{a^{2n-2}}{2b^{2n-1}}$, and $a_{-n} = \frac{a^{2n-1}}{2b^{2n}}$ for $n > 0$.  The total probability that there is a point differential is $\frac{1}{2} + \frac{1}{2b}\left(1 + \frac{a}{b} + \frac{a^2}{b^2} + \cdots\right) = \frac{1}{2} + \frac{1}{2b}\frac{1}{1-\frac{a}{b}} = \frac{1}{2} + \frac{1}{8x}$.  Since this must equal $1$, one gets that $x = \frac{1}{4}$.  The probability that the last team to shoot wins is $\frac{1}{2b}\left(1 + \frac{a^2}{b^2} + \frac{a^4}{b^4} + \cdots\right) = \frac{1}{3}\left(1 + \frac{1}{9} + \frac{1}{9^2} + \cdots\right) = \frac{3}{8}$.  That gives the probability that the last team to play defense wins as $\frac{1}{8}$.
+
+Thus, the probability that the Nicks win a decisive game is $\frac{1}{4}$ and the probability that the Nuaughts win a decisive game is $\frac{3}{4}$.
+\end{document}

@@ -1,0 +1,120 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's July 10, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+ 
+\begin{document}
+\maketitle
+This week's riddler, from Austin Shapiro, is about stacking rings on a child's toy:
+
+\begin{question}
+Mira has a toy with five (extra credit: $n$) rings of different diameters and a tapered column. Each ring has a ``correct'' position on the column, from the largest ring that fits snugly at the bottom to the smallest ring that fits snugly at the top.
+
+Each ring she places will slide down to its correct position, if possible. Otherwise, it will rest on what was previously the topmost ring.
+
+How many ways can she stack the rings, so that there is at least one ring on the column?
+\end{question}
+First off, I will remove the assumption that there is at least one ring on the column; this can be fixed by subtracting $1$ from my answer later.
+
+Define a function $f(n, b)$ as the number of ways to stack rings when there is $n$ units of height left, and $b$ rings that will fit on the bottom (so the riddler is asking about $f(5, 1)-1$).  Then it is easy to see the recurrence relation for $f(n, b)$:
+\begin{align*}
+f(0, b) & = 1 \\
+f(n, b) & = 1 + bf(n, b) + \sum_{i = 0}^{n-2} f(i, b+n-1-i)
+\end{align*}
+
+One can compute (either by hand or with a computer) the first few polynomials:
+\begin{align*}
+f(0, b) & = 1 \\
+f(1, b) & = b + 1 \\
+f(2, b) & = b^2 + b + 2 \\
+f(3, b) & = b^3  + b^2 +  3b  + 4 \\
+f(4, b) & = b^4  + b^3 +  4b^2  + 8b  + 9 \\
+f(5, b) & =  b^5  + b^4 + 5b^3  + 13b^2  + 23b  + 23 \\
+\end{align*}
+
+This might not be easy to see at a glance, but one can rearrange this as follows:
+\begin{align*}
+f(0, b) & = 1 \\
+f(1, b) & = b + 1 \\
+f(2, b) & = b^2 + (b + 1) + 1 \\
+f(3, b) & = b^3  + (b+1)^2 +  (b+2)  + 1 \\
+f(4, b) & = b^4  + (b+1)^3 + (b+2)^2  + (b+3)  + 1 \\
+f(5, b) & =  b^5  + (b+1)^4 + (b+2)^3  + (b+3)^2  + (b+4)  + 1 \\
+\end{align*}
+A clear pattern emerges: $f(n, b) = \displaystyle{\sum_{i = 0}^{n}} (b+i)^{n-i}$.
+
+And now, I suffer through the recursion.  Assume that $f(n, b) = \displaystyle{\sum_{i = 0}^{n}} (b+i)^{n-i}$ for $n < N$.  I will compute $f(N, b)$:
+\begin{align*}
+f(N, b) & = 1 + bf(N-1, b) + \sum_{i = 0}^{N-2} f(i, b+N-1-i) \\
+& = 1 + b\sum_{\ell = 0}^{N-1}(b+\ell)^{N-\ell-1} + \sum_{i = 0}^{N-2} \sum_{j = 0}^{i}(b+N-1+j-i)^{i-j} \\
+& = 1 + \sum_{\ell = 0}^{N-1}b(b+\ell)^{N-\ell-1} + \sum_{i = 0}^{N-2} \sum_{k = 0}^{i}(b+N-1-k)^{k} & (k = i-j) \\
+& = 1 + \sum_{\ell = 0}^{N-1}b(b+\ell)^{N-\ell-1} + \sum_{k = 0}^{N-2} \sum_{i = k}^{N-2}(b+N-1-k)^{k} \\
+& = 1 + \sum_{\ell = 0}^{N-1}b(b+\ell)^{N-\ell-1} + \sum_{k = 0}^{N-2} (N-1-k)(b+N-1-k)^{k} \\
+& = 1 + \sum_{\ell = 0}^{N-1}b(b+\ell)^{N-\ell-1} + \sum_{\ell = 1}^{N-1} \ell(b+\ell)^{N-1-\ell} & (\ell = N-1-k)\\
+& = 1 + b^{N-\ell} +\sum_{\ell = 1}^{N-1}\left(b(b+\ell)^{N-\ell-1} + \ell(b+\ell)^{N-1-\ell}\right) \\
+& = 1 + b^{N-\ell} +\sum_{\ell = 1}^{N-1}(b+\ell)^{N-\ell} \\
+& = \sum_{\ell = 0}^{N}(b+\ell)^{N-\ell}.
+\end{align*}
+Thus, by induction, $f(n, b) = \displaystyle{\sum_{i = 0}^{n}} (b+i)^{n-i}$ for all $n$.  The number that we are looking for is $f(n, 1)-1$, which is just $\displaystyle{\sum_{i = 0}^{n-1}} (1+i)^{n-i} = \displaystyle{\sum_{j = 1}^{n}} j^{n-j+1}$, as the $i = n$ term is $1$.
+
+How big is this?  Define $g(n) = f(n, 1) -1$.  Then I claim that $\displaystyle{\lim_{n\rightarrow\infty}\frac{\ln(g(n))}{n\ln(n)} = 1}.$  Clearly, $g(n) < n\cdot n^n$ so $\ln(g(n)) < (n+1)\ln(n)$.  Moreover, looking at the $\epsilon n$ term, one has that $g(n) > (\epsilon n)^{(1-\epsilon)n}$.  Taking $\ln$ of both sides, one gets that $\ln(g(n)) > (1-\epsilon)n(\ln(n) + \ln(\epsilon)$.  Dividing by $n \ln(n)$ and choosing $n > (\epsilon)^{-\frac{1}{\epsilon}}$, one gets $\frac{\ln(g(n))}{n\ln(n)} > (1-\epsilon)(1 + \frac{\ln(\epsilon)}{\epsilon^{-1}\ln(-\epsilon)}) = (1-\epsilon)^2 > 1-2\epsilon$, so one sees that $\frac{\ln(g(n))}{n\ln(n)}$ is bounded above and below by functions of $n$ that tend to $1$ (admittedly very very \emph{very} slowly for the lower bound; in order to force $\frac{\ln(g(n))}{n\ln(n)} > \frac{9}{10}$, one needs $n > 20^{20}$) showing the growth claimed.
+\end{document}

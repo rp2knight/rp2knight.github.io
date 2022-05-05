@@ -1,0 +1,115 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's February 6, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Toby Berger, is about the classic puzzle of Lucas' Tower:
+\begin{question}
+Cassius the ape (a friend of Caesar’s) has gotten his hands on a Lucas’ Tower puzzle (also commonly referred to as the ``Tower of Hanoi''). This particular puzzle consists of three poles and three disks, all of which start on the same pole. The three disks have different diameters - the biggest disk is at the bottom and the smallest disk is at the top. The goal is to move all three disks from one pole to any other pole, one at a time, but there’s a catch. At no point can a larger disk ever sit atop a smaller disk.
+
+For $N$ disks, the minimum number of moves is $2^{N-1}$. (Spoiler alert! If you haven’t proven this before, give it a shot. It’s an excellent exercise in mathematical induction.)
+
+But this week, the minimum number of moves is not in question. It turns out that Cassius couldn’t care less about solving the puzzle, but he is very good at following directions and understands a larger disk can never sit atop a smaller disk. With each move, he randomly chooses one among the set of valid moves.
+
+On average, how many moves will it take for Cassius to solve this puzzle with three disks?
+\end{question}
+This is essentially setting up a Markov chain and asking how long it takes to reach one of two states.  The obvious Markov chain has $27$ states and that would likely be unweildly to actually deal with.  However, there is a nice simplifiaction: break the states into how many moves you are from finishing if you move optimally.  The starting position is in state $7$, after one move (no matter what!) you will be in state $6$, and so on.
+
+However, there is a catch: there are two essentially different ways to be $3$ and $5$ moves from completion.  When you make the first two moves in the optimal move order, you have a state that has three disks on different pegs.  However, if you then move disk one on top of disk three, then you are still $5$ moves from completion, but now you have no ability to move back to being $6$ moves from completion in one move.  I will call the first state $5a$ and the second state $5b$.  Here is a complete list of which states you can move to from a given state:
+\begin{itemize}
+\item From $7$, you can only move to $6$
+\item From $6$, you can move to $7$, $6$, or $5a$
+\item From $5a$, you can move to $6$, $5b$, or $4$
+\item From $5b$, you can move to $5a$, $5b$, or $4$
+\item From $4$, you can move to $5a$, $5b$, or $3a$
+\item From $3a$, you can move to $4$, $3b$, or $2$
+\item From $3b$, you can move to $3a$, $3b$, or $2$
+\item From $2$, you can move to $3a$, $3b$, or $1$
+\item From $1$, you can move to $2$, $1$, or $0$
+\end{itemize}
+Now, if one defines $x_7$ to be the expected time to reach a solved state if you are at state $7$, and similarly for all the other states, then one has a bunch of equations defining the $x_s$s.  I will give one to show the pattern: $x_{5a} = \frac{1}{3}(x_6 + x_{5b} + x_4) + 1$.  All the others are of the same pattern and they arise because if you are at state $5a$, you have to make one move (for the $+1$) and then you are equally likely to be in states $6$, $5b$, and $4$.
+
+Solving all these equations, one (hopefully!) gets the following solutions:
+\begin{itemize}
+\item $x_1 = 25$
+\item $x_2 = 47$
+\item $x_{3a} = \frac{176}{3}$
+\item $x_{3b} = \frac{163}{3}$
+\item $x_4 = \frac{215}{3}$
+\item $x_{5a} = \frac{232}{3}$
+\item $x_{5b} = 76$
+\item $x_6 = \frac{244}{3}$
+\item $x_7 = \frac{247}{3}$
+\end{itemize}
+Thus, it will take Cassius $\frac{247}{3} = 82.33\ldots$ moves on average to reach the end.
+
+This may seem long; in particular, it may seem like it takes a long time on average when Cassius is one move away to actually close out the deal.  However, Cassius is in this predicament where if he doesn't close out the deal immediately, he likely gets lost in the mess of moving around randomly being several moves away from the end and has to wait until he's likely traversed every possible state.
+\end{document}

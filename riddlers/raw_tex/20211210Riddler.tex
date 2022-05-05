@@ -1,0 +1,99 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's November 26, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+Today's riddler is about fencing strategy:
+\begin{question}
+You are the coach at Riddler Fencing Academy, where your three students are squaring off against a neighboring squad. Each of your students has a different probability of winning any given point in a match. The strongest fencer has a 75 percent chance of winning each point. The weakest has only a 25 percent chance of winning each point. The remaining fencer has a 50 percent probability of winning each point.
+
+The match will be a relay. First, one of your students will face off against an opponent. As soon as one of them reaches a score of 15, they are both swapped out. Then, a different student of yours faces a different opponent, continuing from wherever the score left off. When one team reaches 30 (not necessarily from the same team that first reached 15), both fencers are swapped out. The remaining two fencers continue the relay until one team reaches 45 points.
+
+As the coach, you can choose the order in which your three students occupy the three positions in the relay: going first, second or third. How will you order them? And then what will be your team’s chances of winning the relay?
+\end{question}
+Before solving this problem, it's useful to think about a simpler problem where you have only the strongest and weakest fencers, and the match lasts until 30 points.  Should you send your strongest fencer out first or second?
+
+A key intuition here is that it's better if your ace fences for as long as possible and your weakest fencer to be fencing as little as possible.  It's clear that one expects the first round to last for about 20 points, and the second round to last a lot longer: assuming the score is $15-5$ some direction after the first round, after the first $20$ points of the second round the score will be on average $20-20$ with a lot more fencing to be done.  Thus, the optimal strategy is to send your ace out second, where they have a lot of time to undo the damage of the weakest fencer.
+
+This suggests that the best strategy in the three person relay is to send the ace out last and the weakest fencer out first.  Indeed, if your first two fencers get shut out and the ace is staring down a $30-0$ score, they are still roughly evenly likely to win as they will score three points for every point they concede.  However, this doesn't tell you how often this strategy wins, and to do that I just simulated it.  Letting SMW be the strategy where you send out your strongest fencer first then your middle-of-the-road fencer second and put your weakest fencer out last, a Monte Carlo simulation produced the following odds of winning for the six possible strategies:
+\begin{center}
+\begin{tabular}{c|c}
+WMS & $93.2\%$\\ \hline
+WSM & $82.6\%$ \\ \hline
+MWS & $92.5\%$ \\ \hline
+MSW & $7.5\%$ \\ \hline
+SWM & $17.4\%$ \\ \hline 
+SMW & $6.8\%$
+\end{tabular}
+\end{center}
+As it turns out, it is far more important to send your ace out last than it is to send your weakest fencer out first; which makes some amount of sense.  It also makes sense that as long as you send your ace out after your weakest fencer you are an overwhelming favorite to win.
+
+Finally, if you adopt the best strategy, then even if your ace only wins $62.6\%$ of the time, you are still roughly even odds to win the whole relay.
+\end{document}

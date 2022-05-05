@@ -1,0 +1,109 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's March 26, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler is about a variant of basketball:
+\begin{question}
+The rules for men’s basketball in the Riddler Collegiate Athletic Association’s (RCAA) are a little different from those in the NCAA. In the NCAA, when a player is fouled attempting a 3-point shot and misses, they always get three free throw attempts, regardless of how many fouls the opposing team has committed.
+
+But in the RCAA, a player must earn each additional foul shot by making the previous one. In other words, a player can take a second shot if they make the first, and they can take a third shot if they make the second.
+
+Suppose a player on your team has a known shooting profile: Their probability of making the first free throw is $p$, their probability of making the second is $q$, and their probability of making the third is $r$, such that no two of these probabilities are equal. Meanwhile, their expected number of points made for any given three-point foul (which can be computed from $p$, $q$ and $r$) is also known.
+
+What is the greatest number of distinct shooting profiles that are made up of these three different probabilities - $p$, $q$ and $r$, in some order for the three shots — that can result in the same overall expected number of points?
+\end{question}
+Let $f(x, y, z)$ be the expected number of points scored assuming that the probabilities are $x$, $y$, and $z$ for the first, second, and third shot respectively.  Then one has that $f(x, y, z) = x + xy + xyz$, as the probability that you score the first point is $x$, the probability that you score the second point is $xy$ (you have an $x$ chance to take it and a $y$ chance to make it) and the probability that you score the third point is $xyz$.  Now, since the last term there is the same if you permute $x$, $y$, and $z$, I will also define $g(x, y, z) = x+xy$.
+
+Now let $p$, $q$, and $r$ be fixed distinct probabilities (i.e. real numbers in $[0, 1]$).  We want to see how many possible ways to put $p$, $q$, and $r$ into $g$ give the same value.  Trivially, if $p =0$, then $g(p, q, r) = g(p, r, q) = 0$, so two is always possible\footnote{This isn't the only way to get two; this is just the easiest.  One can also see that $p = .3$, $q = .2$, and $r = .8$ gives $g(p, q, r) = g(q, r, p) = .36$.}.  Now, I want to show the following:
+\begin{enumerate}
+\item $g(p, q, r) = g(q, p, r)$ is impossible.
+\item $g(p, q, r) = g(r, q, p)$ is impossible.
+\item If $g(p, q, r) = g(p, r, q)$, then $p = 0$ and no other permutation of $p$, $q$, and $r$ evaluate to $0$ in $g$.
+\end{enumerate}
+
+If $g(p, q, r) = g(q, p, r)$, then $p + pq = q + pq$ so $p = q$, a contradiction.  Similarly, if $g(p, q, r) = g(r, q, p)$, then $p(1+q) = r(1+q)$.  Since $q \geq 0$, one has that $p = r$, again impossible.  If $g(p, q, r) = g(p, r, q)$, then $p + pq = p + pr$, so $p = 0$ or $q=r$.  Since the second is impossible, one has that $p = 0$.  Now, for any other permutation, since $g(x, y, z) = x(1+y)$, we are plugging a positive number in for $x$ and a non-negative number in for $y$, we get that $g(x, y, z) \neq 0$ for any other permutation.
+
+Thus, if you have at least three possibilities, then you can't have a swap among the permutations, so you must have $g(p, q, r) = g(q, r, p) = g(r, p, q)$ (after renaming).  Thus, we have $$p + pq = q+ qr = r + rp.$$  Now, one gets
+\begin{align*}
+qr(1+p) & = q(p+pq) \\
+& = pq + pq^2 \\
+& \\
+qr(1+p) & = (p + pq - q)(1+p) \\
+& = p + p^2 + pq + p^2q - q -pq \\
+& = p - q + p^2 + p^2q \\
+& \\
+pq + pq^2 & = p - q + p^2 + p^2 q \\
+0 & = p-q + p^2 - pq + p^2q-pq^2 \\
+& = (p-q)(1 + p + pq).
+\end{align*}
+
+Since $p \neq q$, one has that $1+p + pq = 0$, or $q = -\frac{1+p}{p}$.  But $p$ must necessarily be positive, so that gives $q$ being negative, which is also impossible.  Thus, there is no way to have three possible shooting profiles have the same expected number of points.
+\end{document}

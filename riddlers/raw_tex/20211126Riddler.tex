@@ -1,0 +1,87 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's November 26, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+Today's riddler is about thanksgiving turkeys (despite the fact that thanksgiving was almost two months ago):
+\begin{question}
+Trig the turkey cannot fly. And so, instead of flying, he decides to jump as far as he can with a running start up one of the famed Sinusoidal Hills, all of which are precisely the same size.
+
+Trig knows that he cannot jump a horizontal distance of more than two hills. Also, he prefers a smooth takeoff and landing. That is, when he takes off from the ground and lands on it again, the slope of his parabolic trajectory through the air must perfectly match the instantaneous slope of the ground beneath him.
+
+What is the greatest horizontal distance Trig can jump, such that his takeoff and landing are smooth? Again, keep in mind that Trig cannot possibly jump a horizontal distance greater than two hills.
+\end{question}
+
+To get the cheating answer out of the way: a line is a degenerate parabola so Trig can take off at the apex of a hill, go horizontally 2 hills long, and ``land'' smoothly at the hill two hills down and cover a distance of exactly two hills.  That is not what was intended by this problem however, so I will solve this correctly.
+
+Assume that the hills are parameterized by $f(x) = -\cos(x)$.  If Trig takes off from $-c$, he will land at $c$, and so I will let $g_c(x)$ be the parabola describing this jump.  $g_c(x)$ is determined by $g_c'(0) = 0$, $g_c(c) = -\cos(c)$, and $g_c'(c) = \sin(c)$.  The first and third condition show that $g_c(x) = \frac{\sin(c)}{2c}x^2 + b$ for some constant $b$.
+
+The key observation is that this problem is infinitesmal: if Trig can successfully land (equivalently take off), then the path is valid.  Since $g_c'(c) = f'(c)$, this comes down to $g_c''(c) \geq f''(c)$.  Thus, we are free to ignore the $b$ in the expression for $g_c(x)$ above.  One has that $g_c''(c) = \frac{\sin(c)}{c}$, which is compared to $f''(c) = \cos(c)$.  Since we are assuming that $c > \pi$, the inequality becomes $\tan(c) \leq c$, and the longest distance that Trig can jump is twice the value of $c \in [\pi, 2\pi]$ where $\tan(c) = c$.  As far as I know, there is no closed formula for this; it is easy to numerically find by just iterating $c \rightarrow \arctan(c) + \pi$ and you quickly converge to this value.  One gets that $c \approx 4.493409$, or about $1.430297$ times the gap between the hills.
+\end{document}

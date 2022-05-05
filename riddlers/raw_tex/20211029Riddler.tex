@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's October 29, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Arnaud Quentin, is about a new TV show:
+\begin{question}
+Congratulations, you’ve made it to the fifth round of The Squiddler - a competition that takes place on a remote island. In this round, you are one of the 16 remaining competitors who must cross a bridge made up of 18 pairs of separated glass squares.
+
+To cross the bridge, you must jump from one pair of squares to the next. However, you must choose one of the two squares in a pair to land on. Within each pair, one square is made of tempered glass, while the other is made of normal glass. If you jump onto tempered glass, all is well, and you can continue on to the next pair of squares. But if you jump onto normal glass, it will break, and you will be eliminated from the competition.
+
+You and your competitors have no knowledge of which square within each pair is made of tempered glass. The only way to figure it out is to take a leap of faith and jump onto a square. Once a pair is revealed - either when someone lands on a tempered square or a normal square - all remaining competitors take notice and will choose the tempered glass when they arrive at that pair.
+
+On average, how many of the 16 competitors will survive and make it to the next round of the competition?
+\end{question}
+
+Assume there are $n$ tiles and $c$ competitors.  Since each pair of tiles is unknown once, and when it is jumped on, and there is a $50-50$ chance of landing on the tempered glass, one can reperesent what happens with an $n$-term sequence of Ts and Ns, where each term has a $50-50$ chance of being T or N.  Each N represents someone falling through the glass, and on average, $\frac{n}{2}$ terms in the sequence are N, so one is inclined to say that there are $c-\frac{n}{2}$ survivors on average.
+
+But that can't possibly be correct: imagine $n = 4$ and $c = 1$.  This predicts $-1$ people to survive on average, whereas the average number of survivors is pretty clearly $\frac{1}{16}$.  So let's fix the above argument: the goal is to find the probability that $k$ people survive and take the corresponding expected values. There is a $\binom{n}{k}\frac{1}{2^n}$ chance that exactly $k$ people don't make it and so $c-k$ people do, as long as $k < c$.  If $k \geq c$ then we don't need to know the probability of this happening to compute the expected value.  Thus, on average, $\displaystyle{\sum_{k = 0}^c (c-k)\binom{n}{k}\frac{1}{2^n}}$ people make it.
+
+If $c \geq n$, then this is just the computation of the expected number of Ns, which gives $c - \frac{n}{2}$ as above.  But if $c < n$, then some terms are missing, and the easiest thing I see to do is to compute this by hand in the case given in the problem.  In particular, $7 = 16 - \frac{18}{2}$ overcounts the $\frac{-2}{2^{18}}$ and $\frac{-18}{2^{18}}$ terms, so the true expected value is $7 + \frac{5}{2^{16}}$.
+\end{document}

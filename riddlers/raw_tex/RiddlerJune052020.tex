@@ -1,0 +1,178 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\graphicspath{{C:/Users/Emma/Documents/Math/MiscStuff/images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's June 5, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+This week's riddler is about making a sign for a protest:
+\begin{question}
+Some friends have invited you to a protest, and you'll be making a sign with large lettering. You're filling in the sign's letters by drawing horizontal lines with a marker. The marker has a flat circular tip with a radius of 1 centimeter, and you're holding the marker so that it's upright, perpendicular to the sign.
+
+If you draw lines every two centimeters, the shading doesn't look very uniform - each stroke is indeed 2 centimeters wide, but there appear to be gaps between the strokes. Of course, if you drew many, many lines all bunched together, you'd have a rather uniform shading.
+
+But you don't have all day to make this sign. If the lines can't overlap by more than 1 centimeter - half the diameter of the marker tip - what should this overlap be, in order to achieve a shading that's as uniform as possible? And how uniform will this shading be, say, as measured by the standard deviation in relative ink on the sign?
+\end{question}
+To answer this, define $$f_a(x) = \begin{cases} \sqrt{1-x^2} & 0 \leq x \leq a-1 \\ \sqrt{1-x^2} + \sqrt{1-(x-a)^2} & a-1 \leq x \leq 1 \\\sqrt{1-(x-a)^2} & 1 \leq x \leq a \end{cases}$$
+so that $f_a(x)$ describes the amount of ink when you are $x$ cm from the bottom, given that the center of the bottom marker is on $y = 0$ and the center of the next marker is on $y = a$ (technically, this is off by a factor of two.  However, I don't want to keep superfluous factors of two around so I'm going to ignore this until the end).
+
+The average value of $f_a(x)$ on $[0, a]$ is $\frac{\pi}{2a}$ (the total area is the area of two quarter-circles).  Thus, the variance (which is the square of the standard deviation) is $$v(a) = \frac{1}{a} \int_{0}^a \left(f_a(x)-\frac{\pi}{2a}\right)^2dx = \frac{1}{a}\int_{0}^a f_a(x)^2dx - \frac{\pi^2}{4a^3}.$$  Since $f_a$ is symmetric about $\frac{a}{2}$, we get
+\begin{align*}
+v(a) & = \frac{1}{a} \int_{0}^a f_a(x)^2dx - \frac{\pi^2}{4a^3} \\
+& = \frac{2}{a} \int_{0}^{a/2} f_a(x)^2dx - \frac{\pi^2}{4a^3}\\
+& = \frac{2}{a} \int_{0}^{a-1} 1-x^2 dx + \frac{2}{a} \int_{a-1}^{a/2}(1-x^2) + (1-(x-a)^2) + 2\sqrt{(1-x^2)(1-(x-a)^2)}dx - \frac{\pi^2}{4a^3}\\
+& = \frac{2}{a} \int_{0}^1 1-x^2 dx + \frac{2}{a} \int_{a-1}^{a/2}2\sqrt{(1-x^2)(1-(x-a)^2)}dx - \frac{\pi^2}{4a^3}\\
+& = \frac{4}{3a} + \frac{2}{a} \int_{a-1}^{a/2}2\sqrt{(1-x^2)(1-(x-a)^2)}dx - \frac{\pi^2}{4a^3}\\
+& = \frac{4}{3a} + \frac{1}{a} \int_{a-1}^{1}2\sqrt{(1-x^2)(1-(x-a)^2)}dx - \frac{\pi^2}{4a^3}.
+\end{align*}
+The integral in the last line is an elliptic integral.  This doesn't preclude an exact answer, but it isn't a positive sign.  Differentiating, one gets:
+\begin{align*}
+v'(a) & = -\frac{8}{3a^2} - \frac{1}{a^2}\int_{a-1}^{1}2\sqrt{(1-x^2)(1-(x-a)^2)}dx + \frac{1}{a}\int_{a-1}^{1}2(x-a)\sqrt{\frac{1-x^2}{1-(x-a)^2}}dx + \frac{3\pi^2}{4a^4} \\
+& = -\frac{8}{3a^2} + \frac{1}{a^2}\int_{a-1}^{1}-2\sqrt{(1-x^2)(1-(x-a)^2)} + 2a(x-a)\sqrt{\frac{1-x^2}{1-(x-a)^2}}dx + \frac{3\pi^2}{4a^4} \\
+& = -\frac{8}{3a^2} + \frac{1}{a^2}\int_{a-1}^{1}(-2(1-(x-a)^2) + 2a(x-a))\sqrt{\frac{1-x^2}{1-(x-a)^2}}dx + \frac{3\pi^2}{4a^4} \\
+& = -\frac{8}{3a^2} + \frac{1}{a^2}\int_{a-1}^{1}2(x^2-xa-1)\sqrt{\frac{1-x^2}{1-(x-a)^2}}dx + \frac{3\pi^2}{4a^4} \\
+\end{align*}
+This integral is, in fact, still an elliptic integral.  There is no way to evaluate this integral in a closed form, and so it is impossible to continue on from here with an exact answer.  Thus, I will turn to the wonderful world of code.
+
+\begin{verbatim}
+import math
+import scipy.integrate as integrate
+import matplotlib.pyplot as plt
+
+##This is the function f_a(x) in the writeup.  This is the
+##density of ink at one spot given a gap of a.
+def f(x, a):
+    if ((x >= -1) and (x < a-1)):
+        return(math.sqrt(1-x**2))
+    if ((x >= a-1) and (x < 1)):
+        return(math.sqrt(1-x**2)+math.sqrt(1-(x-a)**2))
+    if ((x >= 1) and (x <= a+1)):
+        return(math.sqrt(1-(x-a)**2))
+    else:
+        return(0)
+
+##This gives the average amount of ink and the variance
+##in amount of ink for a given value of a.
+def avg(a):
+    return(math.pi/(2*a))
+
+def variance(a):
+    integral = integrate.quad(lambda x: (f(x, a)-avg(a))**2, 0, a/2)
+    return(integral[0]*2/a)
+
+##These are some basic variables that are used.  accuracy
+##is the inverse of the accuracy for the calculation.  xs
+##and ys are for graphing things.  lowvalue is the lowest
+##value of the variance, and lowpoint is the a value where
+##lowvalue is attained.
+accuracy = 100000
+xs = []
+ys = []
+lowvalue = 1000
+lowpoint = 0
+
+##This is the main loop.  This just graphs the variance, and
+##computes the lowest value of it.
+for i in range(accuracy+1):
+    x = (i/accuracy)+1
+    y = variance(x)
+    if (abs(y) < lowvalue):
+        lowvalue = abs(y)
+        lowpoint = x
+    xs.append(x)
+    ys.append(y)
+
+plt.plot(xs, ys, 'r-')
+plt.show()
+
+print(lowpoint, lowvalue)
+
+plt.close()
+
+##This is for displaying the graph of ink density for the lowest
+##variance distance.  ys is the graph of density, and avgs is
+##the graph of the average amount of ink.
+xs = []
+ys = []
+avgs = []
+for i in range(accuracy+1):
+    x = (i*lowpoint)/(accuracy)
+    y = f(x, lowpoint)
+    xs.append(x)
+    ys.append(y)
+    avgs.append(avg(lowpoint))
+
+plt.plot(xs, ys, 'b-')
+plt.plot(xs, avgs, 'r-')
+plt.plot(0, 0, 'w.')
+plt.plot(lowpoint/2, 1, 'w.')
+plt.show()
+\end{verbatim}
+Running the code with an accuracy of $100000$ I get $1.69182$ as the value of $a$ that gives the lowest variation, with a variation of roughly $.00737$.  This gives an overlap of $.30818$ cm, and a standard deviation of roughly $.08587$ (again, because of the factor of two, this is actually a standard deviation of $.17174$).  Additionally, I will show the two graphs that this code outputs (the graph of the variation and the graph of ink density; in the graph of ink density, the red line is the average value).
+
+\includegraphics[scale=1.0]{June5Figure1}
+
+\includegraphics[scale=1.0]{June5Figure2}
+
+Taking a look at the second graph, the key point seems to be that you minimize how much the second graph goes above $1$ while also limiting how low it goes.  Plugging in $a = \sqrt{3} \approx 1.7321$, one would get the middle peak to be exactly at $y = 1$, and that isn't too far off of what is actually optimal.
+\end{document}

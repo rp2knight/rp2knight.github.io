@@ -1,0 +1,88 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's April 15, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler,  courtesy of Daniel Larsen,  is about Carmichael numbers:
+\begin{question}
+Can you find a Carmichael number which has six digits in base $10$,  and is of the form $ABCABC$ with $A$,  $B$,  and$C$ being digits?
+\end{question}
+Write $x = ABC$ in base 10.   Then,  the question is ``Can you find an integer $x$ such that $100\leq x\leq 999$ and $1001x$ is a Carmichael nummber?''
+
+Since $1001 = 7 \cdot 11\cdot 13$,  one needs that $1001x$ must be congruent to $1 \pmod{60}$,  and so $x \equiv 41 \pmod{60}$.   There are then fifteen numbers to check.   While it is possible to do this by hand,  it's easier to break it into two cases depending on whether $x$ is prime or composite.
+
+If $x$ is prime,  then there is one more condition for $1001x$ to be a Carmichael number: $1001x \equiv 1 \pmod{x-1}$.   This is equivalent to $1001 \equiv 1 \pmod{x-1}$,  or $x-1|1000$.  There is only one such choice of $x$ that is also $41 \pmod{60}$: $x = 101$.   This gives $101101$ as a solution to the problem.
+
+If $x$ is composite,  let $p$ be the smallest prime divisor of $x$ (which can be at most $29$).   By construction,  $p \neq 2, 3,$ or $5$.  Additionally,  $p \neq 7,  11, $ or $13$ because Carmichael numbers are squarefree.   Additionally,  if $p = 23$ (or $29$),  then $1001x-1$ must be divisible by $11$ (or $7$) which is impossible,  as $11|1001$ (or $7|1001$).  Thus,  $p = 17$ or $p = 19$.
+
+If $p = 17$,  then the smallest integer congruent to $41 \pmod{60}$ is $221$.  But that doesn't work,  as $221 = 13\cdot17$.   The second smallest such number is $1411$,  which is too large.   Thus,  $p\neq17$.  If $p = 19$,  then the smallest choice of $x$ is $1121$ which is too large.
+
+Thus,  the only such number is $101101$.
+\end{document}

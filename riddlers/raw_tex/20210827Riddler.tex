@@ -1,0 +1,163 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's August 27, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+
+This week's riddler, from Alon Brodie, is about chasing a football player:
+\begin{question}
+Hames Jarrison has just intercepted a pass at one end zone of a football field, and begins running - at a constant speed of 15 miles per hour - to the other end zone, 100 yards away.
+
+At the moment he catches the ball, you are on the very same goal line, but on the other end of the field, 50 yards away from Jarrison. Caught up in the moment, you decide you will always run directly toward Jarrison’s current position, rather than plan ahead to meet him downfield along a more strategic course.
+
+Assuming you run at a constant speed (i.e., don’t worry about any transient acceleration), how fast must you be in order to catch Jarrison before he scores a touchdown?
+\end{question}
+Some quick observations: firstly, if you don't run faster than Jarrison, you will never catch him.  Since all that's relevant is how much faster you run than Jarrison, I will only track that for this.  If one imagines an arbitrarily long football field, then, as long as you run faster than Jerrison, you will catch him eventually, as your movement will be faster than running the $50$ yards to be in line with him, and then running straight along his path.  Finally, one can see that, at the slowest possible speed to catch Jarrison on a real football field, you will catch him at the $100$ yard mark.
+
+Assume that the football field is placed so that the $x$-coordinate is the distance along the field, Jarrison starts at $(0, 0)$, and you start at $(0, 50)$.  Furthermore, assume that time is scaled so that Jarrison moves at a constant speed of $1$, and you move at a constant speed of $c$.  Then let $f(t)$ be Jarrison's path and $g(t)$ be yours.
+
+It is easy to see that $f(t) = (t, 0)$ given that set up.  Your path satisfies the following differential equation: $g'(t) = c\frac{f(t)-g(t)}{|f(t)-g(t)|}$.  It is technically possible to unwrap that, and I'm sure that there are solutions that exist.  However, this is beyond my abilities, so I will code this up.  The idea is to advance the time in increments where you move towards Jarrison and check to see if your $x$-position has exceeded Jarrison's, as you then have caught him.
+
+I will post my code below, but the result of it is that you don't catch Jarrison if you move $1.28077640533$ times as fast as him, and you do catch Jarrison if you move $1.28077641487$ times as fast as him.  This gives a speed of roughly $19.211646$ miles per hour.  Below is a graph of what the chase looks like at the average of those two speeds:
+
+\includegraphics[scale=.7]{20210827Diagram.png}
+
+One last observation about this before the code: you are guaranteed to catch Jarrison if you move at $1.5$ times his speed (this corresponds to running down the $y$-axis and then along the $x$-axis, which is less good than the route you take) and you cannot catch Jarrison if you move $\frac{\sqrt{5}}{2}$ times as fast as him, as this corresponds to running straight along the diagonal to catch him at the endpoint.  The geometric mean of these two numbers is roughly $1.29501$, which isn't that bad of an approximation.
+
+And now, the code:
+\begin{verbatim}
+import math
+
+##This code moves you c units towards them.
+
+def move(you, them, c):
+    dx = them[0]-you[0]
+    dy = them[1]-you[1]
+    d = math.sqrt(dx**2 + dy**2)
+    x = you[0] + dx*c/d
+    y = you[1] + dy*c/d
+    return([x, y])
+
+##This function tests to see if you catch them given
+##that you move s times as fast as them.  It moves you
+##and them in increments of inc, which defaults to .001.
+
+def test(you, them, s, inc=.001):
+    while ((them[0] < 100) and (you[0] <= them[0])):
+        them[0] += inc
+        you = move(you, them, s*inc)
+    return(them[0] < 100)
+
+##This does binary search to find the slowest possible speed
+##that catches Jarrison.  Quick testing shows that you don't
+##catch Jarrison if you move 1.25 times as fast as him, and
+##that you do if you move 1.29 times as fast as him, so I used
+##those as the start points for the binary search.  acc is how
+##accurate I wanted the search to be.
+
+g1 = 1.25
+g2 = 1.29
+acc = .00000001
+
+while(g2-g1 > acc):
+    you = [0, 50]
+    them = [0, 0]
+    g = (g1 + g2)/2
+    b = test(you, them, g)
+    if b:
+        g2 = g
+    if not b:
+        g1 = g
+
+print(g1, g2)
+
+##This code is to make a pretty picture.
+
+import matplotlib.pyplot as plt
+
+g = (g1+g2)/2
+
+you = [0, 50]
+them = [0, 0]
+
+xs = []
+ys = []
+
+while ((them[0] < 100) and (you[0] <= them[0])):
+    xs.append(you[0])
+    ys.append(you[1])
+    them[0] += .0001
+    you = move(you, them, g*.0001)
+
+plt.plot(xs, ys, 'b-')
+plt.plot([0, 100], [0, 0], 'r-')
+plt.show()
+\end{verbatim}
+\end{document}

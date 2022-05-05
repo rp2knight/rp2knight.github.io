@@ -1,0 +1,97 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's April 8, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This weeks riddler, courtesy of Ben Orlin is pretty mediocre:
+\begin{question}
+In the three-player Game of Mediocrity, you win by not winning too much.
+
+Each round, every player secretly picks a number from $0$ to $10$ inclusive. The numbers are simultaneously revealed, and the median number wins that number of points. (If two or more players pick the same number, then the winner is randomly selected from among them.)
+
+After five rounds, the winner is whoever has the median number of points. (Again, if two or more players have the same score, then the winner is randomly selected from among them.)
+
+With one round remaining, players A, B and C have $6$, $8$ and $10$ points, respectively. Player A sighs and writes down ``$3$,'' but fails to do so in secret. Players B and C both see player A’s number (and both see that the other saw A’s number), and will take care to write their own numbers in secret. Assuming everyone plays to win, what numbers should B and C choose?
+\end{question}
+
+Just to go through the outcome tree:
+\begin{itemize}
+\item If A wins the round, they win the game.
+\item If C wins the round, B wins the game.
+\item If B wins with $3$ or more, C wins the game.
+\item If B wins with exactly $2$, B and C share a $50-50$ on winning the game.
+\item If B wins with $1$ or less, they win the game.
+\end{itemize}
+
+Now, we start from C's perspective: they need to engineer a large B win.  If C guesses something $2$ or less, and this is C's best strategy, then B has a forced win by guessing $0$.  Therefore, any strategy that produces a better chance of winning precludes this from being optimal.  If C guesses $3$, and B guesses anything else, then B has a $50-50$ to win, while if B guesses $3$ then they only have a one in three chance of winning.  Thus, if C's best strategy is to guess $3$, then B guesses literally anything else, and C cannot win.  Therefore, we may assume that C guesses something $4$ or larger.
+
+B knows that C is going to guess something $4$ or larger, and so, if they guess $3$ or less, they know that they cannot win.  Thus, $B$ guesses $4$ or more as well.  The game comes down to who puts the largest number between B and C.  Since this is public knowledge, B and C both just put the largest number they can ($10$) and hope to win the coin flip.
+
+\end{document}

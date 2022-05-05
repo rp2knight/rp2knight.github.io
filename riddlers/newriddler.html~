@@ -1,0 +1,11 @@
+<html>
+   <head>
+<link rel="stylesheet" href="RiddlerStyle.css" type="text/css">
+
+      <title>The most recent riddler.</title>
+      <meta http-equiv = "refresh" content="0; url='https://fivethirtyeight.com/features/can-you-be-mediocre-enough-to-win/'" />
+   </head>
+   <body>
+      <p>This is filler text, written by me.</p>
+   </body>
+</html>

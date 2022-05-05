@@ -1,0 +1,105 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's October 2, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+This week's riddler, from Henk Tijms, is about eating chocolates (something that I think a lot of us can relate to):
+\begin{question}
+I have 10 chocolates in a bag: Two are milk chocolate, while the other eight are dark chocolate. One at a time, I randomly pull chocolates from the bag and eat them — that is, until I pick a chocolate of the other kind. When I get to the other type of chocolate, I put it back in the bag and start drawing again with the remaining chocolates. I keep going until I have eaten all 10 chocolates.
+
+For example, if I first pull out a dark chocolate, I will eat it. (I’ll always eat the first chocolate I pull out.) If I pull out a second dark chocolate, I will eat that as well. If the third one is milk chocolate, I will not eat it (yet), and instead place it back in the bag. Then I will start again, eating the first chocolate I pull out.
+
+What are the chances that the last chocolate I eat is milk chocolate?
+\end{question}
+Define three functions $f(d, m)$, $P_d(d, m, k)$, and $P_m(d, m, k)$ by letting $f(d, m)$ be the probability that the last chocolate is a milk chocolate given that there are $d$ dark chocolates and $m$ milk chocolates in the bag, $P_d(d, m, k)$ the probability that you eat $k$ dark chocolates given that there are $d$ dark chocolates and $m$ milk chocolates in the bag, and $P_m(d, m, k)$ the probability that you eat $k$ milk chocolates.
+
+There are a bunch of properties that are useful:
+\begin{itemize}
+\item $f(d, 0) = 0$ and $f(0, m) = 1$
+\item $\sum_{i = 1}^{d}P_d(d, m, i) + \sum_{j = 1}^m P_m(d, m, j) = 1$
+\item $P_d(d, m, d) = \frac{d}{d+m}\frac{d-1}{d+m-1}\cdots\frac{1}{m+1} = \binom{d+m}{d}^{-1}$ and similarly $P_m(d, m,m) = \binom{d+m}{m}^{-1} = P_d(d, m, d)$
+\item $f(d, m) = \sum_{i = 1}^d P_d(d, m, i)f(d-i, m) + \sum_{j = 1}^m P_m(d, m, j)f(d, m-j)$
+\end{itemize}
+The main fact is this:
+\begin{proposition}
+One has that $f(d, m) = \frac{1}{2}$ for $d, m > 0$.
+\end{proposition}
+This will be proved by induction on $d+m$.  For $d+m =1$, this is vacuously true.  Thus, assume that it's true for all $d', m'$ with $d' + m' < d+m$.  Now, expand out:
+\begin{align*}
+f(d, m) & = \sum_{i = 1}^d P_d(d, m, i)f(d-i, m) + \sum_{j = 1}^m P_m(d, m, j)f(d, m-j) \\
+& = P_d(d, m, d)f(0, m) + P_m(d, m, m)f(d, 0) + \sum_{i = 1}^{d-1} P_d(d, m, i)f(d-i, m) + \sum_{j = 1}^{m-1} P_m(d, m, j)f(d, m-j)\\
+& = \binom{d+m}{d}^{-1}\cdot 1 + \binom{d+m}{m}^{-1} \cdot 0 + \sum_{i = 1}^{d-1} P_d(d, m, i)\frac{1}{2} + \sum_{j = 1}^{m-1} P_m(d, m, j)\frac{1}{2}\\
+& = \binom{d+m}{d}^{-1} + \frac{1}{2}\left(\sum_{i = 1}^{d-1}P_d(d, m, i) + \sum_{j = 1}^{m-1} P_m(d, m, j)\right) \\
+& = \binom{d+m}{d}^{-1} + \frac{1}{2}\left(1-2\binom{d+m}{d}\right) \\
+& = \frac{1}{2}
+\end{align*}
+
+Thus, the proability that the last chocolate is milk chocolate is $\frac{1}{2}$.  Intuitively, the way to think about this result is as follows: at any stage, either you unambiguously will have a dark chocolate as the last chocolate, you unambiguously will have a milk chocolate as the last chocolate, or there is ambiguity.  Whenever there is ambiguity, you have an equal chance of resolving the ambiguity in either direction (i.e. the odds that you eat all the remaining dark chocolates is the same as the odds that you eat all the remaining milk chocolates), and that is true no matter how many dark and milk chocolates are left in the bag.  Thus, whenever you do leave only dark or milk chocolates in the bag, there is a $50-50$ chance that you leave milk chocolates in the bag meaning that the odds that your last chocolate is milk chocolate is $\frac{1}{2}$.
+\end{document}

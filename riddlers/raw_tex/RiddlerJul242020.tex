@@ -1,0 +1,212 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's July 24, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+ 
+\begin{document}
+\maketitle
+This week's riddler is a neat little geometry problem:
+\begin{question}
+Riddler Pinball is a game with an infinitely long wall and a circle whose radius is 1 inch and whose center is $2$ inches from the wall. The wall and the circle are both fixed and never move. A single pinball starts $2$ inches from the wall and $2$ inches from the center of the circle.
+
+To play, you flick the pinball toward a spot of your choosing along the wall, specified by its distance $x$ from the point on the wall that’s closest to the circle.  What’s the greatest number of bounces you can achieve? And, more importantly, what value of $x$ gets you the most bounces?
+\end{question}
+Let's start by thinking about what happens when $x = \frac{2}{3}$.  One can draw the picture below:
+
+\begin{tikzpicture}[scale=3]
+\draw (-2.75, 0) -- (2.75, 0);
+\draw[ultra thick,->] (-2,-2) -- (-2/3,0) -- (0, -1) -- (2/3, 0) -- (2, -2);
+\draw (0,-2) circle (1);
+\filldraw[blue] (-2, -2) circle (1pt); 
+\filldraw (-2/3,0) circle (1pt) node[anchor=south] {$x = \frac{2}{3}$};
+\filldraw (2/3, 0) circle (1pt) node[anchor=south] {$x_1(\frac{2}{3}) = -\frac{2}{3}$};
+\filldraw (0, -1) circle (1pt);
+\draw[dashed] (1, -2) -- (0, -2) -- (0, -1);
+\draw (.3, -2) arc (0:90:.3) node[midway,anchor=south west] {$\theta_1(x) = \frac{\pi}{2}$};
+\end{tikzpicture}
+
+For $x$ near $\frac{2}{3}$, the ball must meet the bumper at a point determined by an angle which I will denote $\theta_1(x)$.  Additionally, for $x$ near $\frac{2}{3}$, there is a second point of intersection along the wall which I will denote $x_1(x)$.  $\theta_1$ and $x_1$ are both clearly an increasing continuous functions of $x$, and on the interval of $x$s where $x_1$ is defined, its image is all of $\R$.  Thus, there must exist some $x_{1,1}$ such that $x_1(x_{1,1}) = 0$.  Near $x_{1,1}$, there is a second point of intersection on the bumper, which I will denote by $\theta_2(x)$.  Again, $\theta_2$ is clearly an increasing function of $x$, and it's not too hard to see that there is a value $x_{0,2}$ such that $\theta_2(x_{0,2}) = \frac{\pi}{2}$.
+
+This process repeats, giving functions $x_k$ and $\theta_k$, as well as $x$-values $x_{0, k}$ and $x_{1, k}$ with the properties that $\theta_k(x_{0,k}) = \frac{\pi}{2}$ and $x_k(x_{1,k}) = 0$.  If one chooses to aim at $x_{0,k}$, one gets $4k-1$ bounces, while $x_{1, k}$ produces $4k+1$ bounces.  But notice that $x_{1,1} < x_{0,2} < x_{1,2} < \cdots$ and all of the $x_{i,k}$s are less than $2$ basically by definition.  Thus, there exists a number $\tilde{x} = \lim x_{0, k} = \lim x_{1,k}$.  What happens if you aim at $\tilde{x}$?
+
+Define $b(x)$ to be the number of bounces that occur after shooting off in towards $x$.  Adopt the convention that a tangency to the bumper counts as a bounce, as well as the convention that if the final ray is parellel to the $x$-axis, that counts as a bounce as well.  Then $b(x)$ is upper semincontinuous, and $b(x_{1, k}) = 4k+1$, so $b(\tilde{x}) = +\infty$.  Since you clearly can't beat $+\infty$, this must be optimal.
+
+Notice that one could get a similar approach by starting at $x = 4-4\sqrt{2}$ (a negative number; this will actually hit the bumper first) and decreasing $x$ to $-\infty$.  The starting position is shown below:
+
+\begin{tikzpicture}[scale=3]
+\draw (-2.75, 0) -- (2.75, 0);
+\draw[ultra thick,->] (-2,-2) -- (-70/99,-128/99) -- (0, 0) -- (70/99,-128/99) -- (2, -2);
+\draw (0,-2) circle (1);
+\filldraw[blue] (-2, -2) circle (1pt); 
+\filldraw (-70/99,-128/99) circle (1pt);
+\filldraw (70/99, -128/99) circle (1pt);
+\filldraw (0, 0) circle (1pt);
+\end{tikzpicture}
+
+Now, all that's left is to compute $\tilde{x}$.  Many thanks to Brett Berger for insightful conversations about this half of the write-up.  To that end, it is correct to think about what happens when the line the ball is moving along is near the line $x = 0$.  Label the points the ball hits on the wall $x_0 = \tilde{x}, x_1, \ldots$, and write the equation for the line coming out the wall $x-x_n = m_n(y-2)$.  If $x_n$ and $m_n$ are small, then the bumper is just a straight line, so one collides with the bumper at the point $(x_n-m_n, 1)$.  The angle of the line from the center of the bumper to the intersection point is roughly $x_n-m_n$ while the angle of the original line is roughly $m_n$.  Thus, the angle of the line coming out of the bumper is $2x_n-3m_n$, and so one gets $x_n+1 = 3x_n - 4m_n$.  Moreover, the new slope is just $m_{n+1} = -(2x_n - 3m_n) = -2x_n + 3m_n$.  Thus, one has that $\left(\begin{smallmatrix}x_{n+1} \\ m_{n+1}\end{smallmatrix}\right) = \left(\begin{smallmatrix} 3 & -2 \\ -4 & 3\end{smallmatrix}\right)\left(\begin{smallmatrix}x_n \\ m_n\end{smallmatrix}\right)$.  A simple computation shows that the eigenvalues of this matrix are $3\pm2\sqrt{2}$, and the $3-2\sqrt{2}$ eigenvector is $\left(\begin{smallmatrix}\sqrt{2} \\ 1\end{smallmatrix}\right)$.  Thus, if one manages to get $x_n$ and $m_n$ to be small and in a ratio close to $\sqrt{2}:1$ then the pinball should bounce for a long long time.
+
+One can easily see that $m_0 = 1-\frac{x}{2}$.  Define $f_k(x) = x_k-m_k\sqrt{2}$.  Near $\tilde{x}$, this is a well-defined function of $x$ and $\tilde{x}$ is close to a zero of $f_k$.  It is not too bad to write code to compute values of $f_k$ and approximate zeroes.  I found the following zeroes of $f_k$:
+
+\begin{tabular}{c | c}
+$k$ & the zero \\
+\hline
+$0$ & $.8284271247461902$ \\
+$1$ & $.8224910999491976$ \\
+$2$ & $.8224863290728398$ \\
+$3$ & $.8224863249469717$ \\
+$4$ & $.8246473262941052$
+\end{tabular}
+
+I strongly suspect that floating point errors are balooning and by the time that you get $n = 4$, the answer is dominated by such errors.  Thus, I am happy saying that you should flick the ball at an $x$-value of approximately $.8224632$, but commiting to more decimal places seems foolish.
+
+Finally, here is the code:
+\begin{verbatim}
+import math
+
+## This computes the intersection point on the
+##circle given that your initial point is at x
+##and your slope is m.
+def intersection(x, m):
+    a = 1+m*m
+    b = 2*m*(x-2*m)
+    c = (x-2*m)**2-1
+    ynew =(-b+math.sqrt(b*b-4*a*c))/(2*a)
+    xnew = m*(ynew-2) + x
+    return [xnew, ynew]
+
+##This computes the next pair of x and m from
+##your current pair.
+def nextpoint(x, m):
+    v = intersection(x, m)
+    n = v[0]/v[1]
+    mnew = ((2*n-m+m*n*n)/(1+2*m*n-n*n))
+    dy = 2-v[1]
+    xnew = v[0]+dy*mnew
+    return [xnew, -1*mnew]
+
+##This just iterates the previous function k times.
+def iterate(x, m, k):
+    if (k == 0):
+        return[x, m]
+    v = nextpoint(x, m)
+    return iterate(v[0], v[1], k-1)
+
+##This is the function that we are looking for a zero
+##of.
+def f(x, k):
+    m = 1-(x/2)
+    v = iterate(x, m, k)
+    return v[0]-math.sqrt(2)*v[1]
+
+##These two functions approximate a zero of f by doing
+##midpoint division.
+def nextpair(a, b, n):
+    y1 = f(a, n)
+    y2 = f((a+b)/2, n)
+    y3 = f(b, n)
+    if (y1/y2 > 0):
+        return([(a+b)/2, b])
+    if (y2/y3 > 0):
+        return([a, (a+b)/2])
+
+def approximate(a, b, n, k):
+    if (k == 0):
+        return (a+b)/2
+    v = nextpair(a, b, n)
+    return approximate(v[0], v[1], n, k-1)
+
+print(approximate(.82, .83, 0, 40))
+print(approximate(.82, .83, 1, 40))
+print(approximate(.82, .83, 2, 40))
+print(approximate(.82, .83, 3, 40))
+print(approximate(.82, .825, 4, 40))
+
+\end{verbatim}
+%Instead of starting at the specified starting point and flicking towards the wall, I'm going to imagine what happens if you start at the point corresponding to $x = 0$ and flick the ball an angle of $\theta$ off of horizontal.
+%
+%For $\theta$ close to $\pi/2$, the ball just careens off into space never to collide with anything.  However, as $\theta$ decreases to $0$, eventually it hits the bumper at a point that I will call $\psi_1(\theta)$.  Let $\theta_{0,1}$ be the largest value of $\theta$ where the ball collides with the bumper.  For $\theta$ just less that $\theta_{0,1}$, the ball will just head off into space after colliding with the bumper.  Call the angle that it heads off into space $\vartheta_1(\theta)$.  However, there is a value of $\theta$ which I will call $\theta_{1,1}$ where $\vartheta_1(\theta) = \pi/2$.  For $\theta < \theta_{1,1}$, the ball will then collide with the wall at a point I will call $x_1(\theta)$, and head off into space at the angle $\vartheta_1(\theta)$.  See the picture below for clarity.
+%
+%\begin{tikzpicture}[scale=3]
+%\draw (-3,2) -- (1,2);
+%\draw (0,0) circle (1);
+%\draw[dashed] (0,2) -- (0,1);
+%\draw[dashed] (-14/11, 2) -- (-14/11, 1.3);
+%\draw[dashed] (-.28, .96) -- (-.28, .95+.7);
+%\draw[ultra thick] (0,2) -- (-.28, .96) -- (-14/11, 2) -- (-3, 4/21);
+%\draw[dashed] (0,1) -- (0,0) -- (-.28, .96);
+%\draw (0, .7) arc (90:106:.7) node[anchor=south,midway] {$\psi_1(\theta)$};
+%\filldraw (-14/11, 2) circle (1pt) node[anchor=south] {$x_1(\theta)$};
+%\filldraw (-.28, .96) circle (1pt);
+%\draw (-14/11, 2-.5) arc (270:228:.5) node[anchor=north,midway] {$\vartheta_{1}(\theta)$};
+%\draw (-.28, .96+.5) arc (90:133:.5) node[anchor=south,midway] {$\vartheta_{1}(\theta)$};
+%\draw (0,2-.3) arc (270:254:.3) node[anchor=north,midway] {$\theta$};
+%\filldraw[blue] (0,2) circle (1pt);
+%\filldraw[red] (-2, 0) circle (1pt);
+%\end{tikzpicture}
+%
+%Now, notice that, as $\theta$ decreases to $0$, all of $\psi_1(\theta)$, $x_1(\theta)$, and $\vartheta_1(\theta)$ decrease as well.  Thus, there is a $\theta$ value, called $\theta_{0,2}$, where the ray starting at $x_1(\theta)$ going in the direction $\vartheta_1(\theta)$ is exactly tangent to the bumper.  I will denote that ray $r_1$.  For $\theta <\theta_{0, 2}$, there is now a second point of collision $\psi_2(\theta)$ on the bumper, and the ball heads off at an angle of $\vartheta_2(\theta)$. You can then find $\theta_{1,2}$ such that $\vartheta_2(\theta_{1,2}) = \pi/2$, and for $\theta < \theta_{1,2}$ there is another point of collision on the wall $x_2(\theta)$.  This process clearly repeats, producing angles $\theta_{0, k}$ and $\theta_{1, k}$, points $\psi_k(\theta)$, $x_k(\theta)$, and $\vartheta_k(\theta)$, and rays $r_k$, where $\theta_{0,1} > \theta_{1, 1} > \theta_{0, 2} > \theta_{1, 2} > \cdots$, $\psi_k: [0, \theta_{0,k}] \rightarrow [0, \pi]$, $x_k:[0, \theta_{1,k}) \rightarrow [0, \infty)$, $\vartheta_k: [0, \theta_{0,k}] \rightarrow [0, \pi]$, and all of $\psi_k$, $x_k$, and $\vartheta_k$ are decreasing on their domains.
+%
+%The key observation is that, if your actual starting point is above $r_k$, then there is a choice of $x$ such that you can get $4k+1$ bounces: notice that for $\theta$ just less that $\theta_{1, k}$ the ray that the ball shoots off in is going to be above your starting point.  As $\theta$ decreases to $\theta_{0, k+1}$, the ray must cross the starting point as the starting point ends above $r_k$.  Call the angle where the final path passes through your starting point $\theta_k$.  Then, flicking from the starting point to $x_k(\theta_k)$, the ball bounces at $x_k(\theta_k)$, $\psi_k(\theta_k)$, $x_{k-1}(\theta_k)$, \ldots, $\psi_1(\theta_k)$, 0, $-\psi_1(\theta_k)$, \ldots, $-\psi_k(\theta_k)$, and $-x_k(\theta_k)$, for a total of $4k+1$ bounces.
+%
+%You may think now that we need to figure out what the rays $r_k$ are.  However, we know enough about $r_k$ to say that the given initial starting point is above all of them.  Notice that $x_k(\theta_{0, k+1})$ is greater than $0$ and less than $1$, and the ray is determined by just the value of $x_k(\theta_{0, k+1})$.  Additionally, a point $p$ is above this ray if and only if the line segment connecting $p$ to $x_k(\theta_{0, k+1})$ doesn't intesect the bumper.  By that logic, it is incredibly easy to see that the point that is one unit away from the bumper and two units away from the wall is above all of the rays $r_k$ and so it is possible to get as many bounces as desired.
+\end{document}

@@ -1,0 +1,94 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's February 25, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler, from the trio of Sean Sweeney, Chris Nho, and Eli Luberoff, is a small geometry challenge:
+\begin{question}
+Suppose you have two distinct points are anywhere on the coordinate plane. If I tell you that a parabola with a vertical line of symmetry passes through those two points, where on the plane could that parabola’s vertex be?
+\end{question}
+If your points have the same $y$-coordinate, then the answer will be the vertical line that lies halfway between the two points.  If they have the same $x$-coordinate, then the answer will be empty, as there are no vertical parabolas that pass through the two points.  Thus, I will assume that the $x$ and $y$-coordinates of these points are distinct.
+
+The answer to this question is pretty clearly equivariant under the action of $Aff_1(\R) \times Aff_1(\R)$, that is, if $a, b, c, d \in \R$ with $a, c \neq 0$, and you apply the transformation $(x, y) \rightarrow (ax + b, cy + d)$ to your two points, then the answer is given by applying the same transformation to the original answer.  The upshot of this is that if you find the solution for one pair of points and describe it in terms of things that are equivariant under this action, then you have found the solution in general.
+
+Since I only need to solve this for one pair of points, I will choose $(1, 2)$ and $(-1, -2)$.  Then one has that the parabola $ax^2 + bx + c$ passes through these points if and only if
+\begin{align*}
+a + b + c & = 2 \\
+a - b + c & = -2
+\end{align*}
+
+This easily rearranges to $c = -a$ and $b = 2$.  Thus, the set of all such parabolas is given by $tx^2 + 2x -t$ for $t \neq 0$.  The critical $x$-value is given by $2tx + 2 = 0$ or $x = -1/t$.  The full critical point is then $(-1/t, -1/t-t)$.  Letting $s = -1/t$, this becomes $(s, s + 1/s)$.  This is a hyperbola, with one asymptote given by $x = 0$ and the other by $y = x$, and passing through $(1, 2)$ and $(-1, -2)$.  This information is enough to uniquely determine the hyperbola, and so is the answer.
+
+One can describe this hyperbola as the hyperbola with two asymptotes that pass through the midpoint of $(1, 2)$ and $(-1, -2)$, with one of them being vertical and the other having slope exactly one-half of the slope of the line connecting those two points.  Finally, the hyperbola must pass through those two points, and that uniquely determines the hyperbola.  Thus, one has the answer for two points $P_1$ and $P_2$ given as follows: let $Q$ be the midpoint of $P_1$ and $P_2$, and $s$ be the slope of the line connecting $P_1$ and $P_2$.  Then the desired locus is the hyperbola with both asymptotes passing through $Q$; one is vertical and one has slope $s/2$.  The hyperbola also passes through $P_1$ and $P_2$, and this pins it down completely.
+
+Why does the non-vertical asymptote have slope that is half the slope of the original line?  To answer this question, instead of picturing a very large parabola, picture two points that are very close and far from the center of the parabola.  Then we can basically assume that the two points are basically one point $P$, and instead the line connecting them is the tangent line to $P$.  But it is then easy to see that, on the vertical line containing the vertex of the parabola, the change between the $x$-coordinate of $P$ and the vertex is equal to the change between the $x$-coordinate of the vertex and where the tangent line intersects the vertical line.  Thus, the slope of the second asymptote is exactly half the slope of the line connecting the two points.
+
+Finally, I want to answer the question ``What happens as the two points become horizontally or vertically aligned?''  When the two points become vertically aligned, the hyperbola tends towards a double line passing through those points.  This makes some amount of sense: the only vertically aligned ``parabola'' that passes through the two points is the double line passing through them; and every point on this line has a non-tranverse intersection with a horizontal line.  As the two points become horizontally aligned, the hyperbola becomes a pair of lines: the vertical line halfway between the two points and the horizontal line passing through the two points.  Again, this makes sense: the degenerate ``parabola'' which is just the horizontal line passing through these points has a critical point everywhere on said line!
+\end{document}

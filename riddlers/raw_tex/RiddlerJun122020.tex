@@ -1,0 +1,107 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\graphicspath{{C:/Users/Emma/Documents/Math/538Riddlers/Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+
+\title{FiveThirtyEight's June 12, 2020 Riddler}
+\author{Emma Knight}
+
+\begin{document}
+\maketitle
+This week's riddler, from Adam Wagner, is about a colony of (hopefully benign) ever-growing bacteria:
+\begin{question}
+You are studying a new strain of bacteria, \emph{Riddlerium classicum} (or \emph{R. classicum}, as the researchers call it). Each \emph{R. classicum} bacterium will do one of two things: split into two copies of itself or die. There is $4/5^{ths}$ chance of the former and a $1/5^{ths}$ percent chance of the latter.
+
+If you start with a single \emph{R. classicum} bacterium, what is the probability that it will lead to an everlasting colony (i.e., the colony will theoretically persist for an infinite amount of time)?
+
+Extra credit: Suppose that, instead of $4/5$, each bacterium divides with probability $p$. Now what's the probability that a single bacterium will lead to an everlasting colony?
+\end{question}
+
+This riddler is a masterstroke in asking the correct question.  The answer to this riddler is in the following theorem:
+\begin{theorem}
+Given the setup of the riddler, one has the following:
+\begin{itemize}
+\item If $p \leq \frac{1}{2}$, then the odds that the colony lasts forever is $0$.
+\item If $p \geq \frac{1}{2}$, then the odds that the colony lasts forever is $2 - \frac{1}{p}$.
+\end{itemize}
+\end{theorem}
+\begin{proof}
+The trick here is to notice that counting the number of bacteria at every time is the wrong way to solve this.  Instead, imagine a queue of all of the bacteria.  When a bacterium gets to the front of the queue, it either dies with probability $1-p$ or puts two new bacteria at the end of the queue with probability $p$.  Call that process one iteration of the queue.  Then, the only thing that is relevant is the length of the queue at each step as each bacterium behaves identically and is independent from the other bacteria.  The queue starts at length $1$, and the question is whether the queue runs out.
+
+%First, assume that $p < \frac{1}{2}$.  I wish to compute the odds that the bacteria colony is still alive after $n$ iterations of the queue.  I claim that this probability is at most $$\sum_{a+b = n\atop a\geq b} p^a(1-p)^b\binom{n}{a}.$$  Granting this claim for the moment, notice that, after playing around with the central limit theorem, this sum is roughly $$\frac{1}{\sqrt{2\pi}} \int_{C\sqrt{n}}^\infty e^{-\frac{x^2}{2}}dx,$$ with $C = \frac{1-2p}{2\sqrt{p(1-p)}}$.  This quickly goes to $0$ as $n \rightarrow \infty$.
+%
+%To show the claim, consider a random walk on $\Z$ that starts at $1$, increases by $1$ with probability $p$ and decreases by $1$ with probability $1-p$.  The probability that the queue does not run out after $n$ steps is at most the probability that the random walk is at a number that is at least $1$ after $n$ steps: imagine that a bacterium dying in an iteration of the queue is the same as decreasing in the random walk and the odds that a bacteria splitting in an iteration of the queue is the same as increasing in the random walk.  The key thing that's different about the random walk is that you can ``revive'' the queue: it's possible to get to $0$ in the random walk and then go back to $1$; this is impossible in the bacterium queue.  Thus, the odds of the bacteria colony being alive after $n$ iterations of the queue is at most the odds of the random walk having not decreased after $n$ steps, which is clearly this sum.
+
+%Now, I will drop the assumption that $p < \frac{1}{2}$ and compute the odds that the colony dies eventually.
+First, I will compute the odds that the colony dies in exactly $2k+1$ iterations of the queue: in order for this to happen, one needs the bacteria to split $k$ times, and die $k+1$ times.  Moreover, there must always be bacteria in the queue after each of the first $2k$ iterations, there must be exactly one bacteria after $2k$ iterations of the queue, and this bacteria must die in the $(2k+1)^{st}$ iteration of the queue.  There are $\frac{1}{k+1}\binom{2k}{k}$ (the $k^{th}$ Catalan number) possible ways to order $k$ splits and $k$ deaths such that there is always at least one bacterium in the queue and you end with exactly $1$ bacterium in the queue after $2k$ iterations of the queue.  Thus, the odds that the colony dies in $2k+1$ iterations of the queue is $$(1-p)\left(\left(p(1-p)\right)^k\frac{1}{k+1}\binom{2k}{k}\right).$$
+
+Summing this up over all $k$, one gets that the odds that the colony dies eventually is $$(1-p)\sum_{k = 0}^{\infty} \left(p(1-p)\right)^k\frac{1}{k+1}\binom{2k}{k}.$$  Define $f(x) = \displaystyle{\sum_{k=0}^{\infty} x^k\frac{1}{k+1}\binom{2k}{k}}$.  Then one has that $\frac{d}{dx}(xf(x)) = \displaystyle{\sum_{k=0}^{\infty} x^k\binom{2k}{k} = \frac{1}{\sqrt{1-4x}}}$.  Thus, $xf(x) =  \frac{1-\sqrt{1-4x}}{2}$ and so $f(x) = \frac{1-\sqrt{1-4x}}{2x}$.  Now, I just evaluate: 
+\begin{align*}
+(1-p)f(p(1-p)) & = (1-p)\frac{1-\sqrt{1-4(p(1-p))}}{2p(1-p)} \\
+& = \frac{1-\sqrt{1-4p+4p^2}}{2p} \\
+& = \frac{1 - |1-2p|}{2p}
+\end{align*}
+If $p \leq \frac{1}{2}$, then this is $\frac{1-(1-2p)}{2p} = \frac{2p}{2p} = 1$, so the odds that the colony dies eventually is $1$ and thus the odds that it lives forever is $0$.  If $p \geq \frac{1}{2}$ then this is $\frac{1+(1-2p)}{2p} = \frac{1-p}{p} = \frac{1}{p} - 1$, so the odds that the colony dies eventually is $\frac{1}{p} - 1$ and thus the odds that it lives forever is $2-\frac{1}{p}$.
+\end{proof}
+Thus, one has the exact probability of the colony living forever.  In the particular case of the riddler, this is $2-\frac{5}{4} = \frac{3}{4}$.
+
+But what if there are more bacteria?  Assume that the colony starts with $k$ bacteria instead of just $1$, and the probability of a bacteria splitting is $p$ and dying is $1-p$.  Clearly, if $p \leq \frac{1}{2}$ the probability that the bacteria colony doesn't die off is still $0$, so I will only consider the case that $p > \frac{1}{2}$.  Write $x_i$ for the probability that the colony lives forever.
+
+Then one has the relation $x_i = px_{i+1} + (1-p)x_{i-1}$.  This can be rearranged to $p(x_{i+1}-x_i) = (1-p)(x_i-x_{i-1})$.  Write $q = \frac{1-p}{p}$ and $y_i = x_{i+1}-x_0$.  Then one has that $x_0 = 0$ and $\displaystyle{\lim_{n\rightarrow \infty}} x_n = 1$ by definition.  Rephrasing this in terms of the $y_i$s, one has that $y_{i+1} = q y_i$ and $\displaystyle{\sum_{n = 0}^{\infty}} y_n = 1$.  But that says that $y_i = q^i y_0 = q^i x_0$ and so $\frac{x_1}{1-q} = 1$, or $x_1 = 1-q$ (which is what we got before!).  Then $x_i = \displaystyle{\sum_{n = 0}^{i-1} q^n x_1 = \frac{(1-q^i)x_1}{1-q} = 1-q^i}$.  Thus, if $p > \frac{1}{2}$, $x_i = 1-\left(\frac{1-p}{p}\right)^i$.
+\end{document}

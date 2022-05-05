@@ -1,0 +1,86 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's May 28, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+
+This week's riddler is a setpiece in an action-adventure movie:
+\begin{question}
+Dakota Jones is back in action! To gain access to a hidden temple deep in the Riddlerian Jungle, she needs a crystal key.
+
+She already knows the crystal is a polyhedron. And according to an ancient text, it has exactly six edges, five of which are $1$ inch long. Cryptically, the text does not specify the length of the sixth edge. Instead, it says that the key is the largest such polyhedron (i.e., with six edges, five of which have length $1$) by volume.
+
+Once again, Dakota Jones needs your help. What is the volume of the crystal key?
+\end{question}
+
+The only way you can have a polyhedron with six edges is if it's a tetrahedron.  Since five of the edges have length $1$, you know that there are two equilateral triangle faces.  Rotate the tetrahedron in $\R^3$ so that the mystery edge is along the $z$-axis, and so that the edge opposite the mystery edge is parellel to the $y$-axis.  Additionally, place the middle of the mystery edge at the origin.
+
+Let $h$ be the distance from the middle of the mystery edge to the end of it, and $b$ be the distance from the origin to the edge opposite the mystery edge.  One can see that the volume of the tetrahedron is $\frac{bh}{3}$.  Additionally, one has that $b^2 + h^2 = \frac{3}{4}$.  Thus, we are trying to maximize $\frac{bh}{3}$ subject to $b^2 + h^2 = \frac{3}{4}$.  It is straightforward to see that this is maximized when $b = h$, and so one gets $V = \frac{bh}{3} = \frac{b^2}{3}= \frac{b^2 + h^2}{6}= \frac{1}{8}$.
+\end{document}

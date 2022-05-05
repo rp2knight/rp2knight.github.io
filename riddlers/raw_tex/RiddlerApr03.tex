@@ -1,0 +1,123 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\graphicspath{{C:/Users/Erick/Documents/Math/MiscStuff/images/}}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+
+\title{FiveThirtyEight's April 3, 2020 Riddlers}
+\author{Emma Knight}
+
+\begin{document}
+\maketitle
+This is a solution to both the riddler express and the riddler from FiveThirtyEight on April 3, 2020.
+\section{Riddler Express}
+Here is the question:
+\begin{question}
+You're walking along the middle of a wide sidewalk when you see someone walking toward you from the other direction, also down the middle of the sidewalk, $12$ feet away. Being responsible citizens, you pass each other while maintaining a distance of at least $6$ feet at all times. By the time you reach each other’s original positions, you should be back in the middle of the sidewalk again.
+
+You should assume that the other person follows the same path you do, but flipped around (since they're walking in the opposite direction).  Being lazy (I mean, efficient), you'd like to know the shortest distance you and the other person could walk so that you can switch positions, all while staying at least $6$ feet apart at all times.  What is this distance?
+\end{question}
+
+I will put some coordinates on this: model the sidewalk as the $xy$-plane, and assume that you start at $(6,0)$ while the other person starts at $(-6,0)$.  Now, if you are at a point $(x,y)$ at a given time, the other person is at $(-x, -y)$ at the same time, and so the distance between the two of you is twice the distance between you and the origin.  Thus, the path you want to take is one that stays at least three feet away from the origin at any time.
+
+It is easy to visualize what to do here: walk in a direction that is tangent to the circle $x^2+y^2 = 9$ and passes through $(6,0)$, then walk along the circle, and then walk in a direction that is tangent to the circle and passes through $(-6,0)$.  Proving that this is correct isn't too difficult: if your path doesn't touch the circle, then you can scale your $y$-position down by something slightly less than one, and you still have a valid path that is shorter.  If your path isn't taking a straight line to the circle, then replacing the path to the circle with a straight line is shorter.  Finally, if your path isn't tangent to the circle, then hitting the circle a little farther up also shortens the path.
+
+Now, the question is ``which line do you take?''  Assume that you touch the circle at $(x_0, y_0)$.  Then the triangle $(0,0)$, $(x_0, y_0)$, $(6,0)$ is a right triangle with one side of length $3$ and the hypotenuse of length $6$.  Then, one sees that the other side has length $3\sqrt{3}$, and the angle between the positive $x$-axis and the line from $(0,0)$ to $(x_0, y_0)$ is $\frac{\pi}{3}$.
+
+Thus, one walks in a straight line of length $3\sqrt{3}$, walks one-sixth of the way around a circle of radius $3$, and then walks in a straight line of length $3\sqrt{3}$ for a total length of $6\sqrt{3} + \pi$.
+\section{Riddler}
+Here is the question:
+\begin{question}
+One morning, it starts snowing. The snow falls at a constant rate, and it continues the rest of the day.  At noon, a snowplow begins to clear the road. The more snow there is on the ground, the slower the plow moves. In fact, the plow's speed is inversely proportional to the depth of the snow — if you were to double the amount of snow on the ground, the plow would move half as fast.  In its first hour on the road, the plow travels $2$ miles. In the second hour, the plow travels only $1$ mile.
+
+When did it start snowing?
+\end{question}
+Let's assume that it started snowing $x$ hours ago.  Then the amount of distance that the snow plow traveled in the first hour would be $c\int_{x}^{x+1}\frac{dt}{t}$, and the distance the snow plow traveled in the second hour would be $c\int_{x+1}^{x+2}\frac{dt}{t}$ for some constant $c$.  Computing these integrals and using the knowledge given in the problem, one gets that $\displaystyle{c\ln\left(\frac{x+1}{x}\right) = 2c\ln\left(\frac{x+2}{x+1}\right)}$, which easily rearranges into $\frac{x+1}{x} = \left(\frac{x+2}{x+1}\right)^2$, or $x(x+2)^2 - (x+1)^3 = 0$.  Expanding this out, one gets $x^2 + x -1 = 0$.  Since $x$ is clearly positive, one has that $x = \phi^{-1} = \phi - 1$ where $\phi$ is the golden ratio.  Thus, it started snowing $\phi^{-1}$ hours ago (or roughly $37.08$ minutes ago).
+
+There is an implied extra credit problem here: what if the ratio isn't $2$ on the nose, but rather some number $\alpha$.  Then how long ago did the plows start?  In particular, what happens as $\alpha \rightarrow \infty$?
+
+Denote the answer $x(\alpha)$, which, in blatant abuse of notation, will be written as $x$.  Then one easily sees that $\frac{x+1}{x} = \left(\frac{x+2}{x+1}\right)^\alpha$.  It is pretty clear that, as $\alpha \rightarrow \infty$, $x \rightarrow 0$.  Thus, $x+1 \approx 1$ and $x+2 \approx 2$.  Then, the equation becomes $x^{-1} \approx 2^\alpha$, or $x \approx 2^{-\alpha}$.
+
+Now, one might ask what the error is.  It turns out that there is an exact expansion for the function $x(\alpha)$:
+\begin{theorem}
+There exist polynomials $p_2(\alpha), p_3(\alpha), \ldots \in \Q[\alpha]$ with $\mathrm{deg}(p_k) \leq k-1$ and such that $x(\alpha) = 2^{-\alpha} + p_2(\alpha)4^{-\alpha} + p_3(\alpha)8^{-\alpha} + \ldots$.
+
+Moreover, the first couple of polynomials are $p_2(\alpha) = \frac{1}{2} \alpha + 1, p_3(\alpha) = \frac{3}{8}\alpha^2 + \frac{9}{8}\alpha + \frac{3}{2}$.
+\end{theorem}
+\begin{proof}
+Since powers of $2^{-\alpha}$ will appear a lot, I will let $q = 2^{-\alpha}$ to simplify things.
+
+The defining equation for $x(\alpha)$ is $(x+1)^{\alpha +1} = x(x+2)^\alpha$.  After some rearrangement, one can write this as $(\alpha+1)\ln(1+x) = \ln(2^\alpha x) + \alpha \ln(1 + \frac{x}{2})$.  Now, assume that we know that $x = q + p_2(\alpha)q^2 + \ldots + p_k(\alpha)q^k + E_k(\alpha)$, where $E_k$ is an error term that is $o(q^k)$.  Plugging that into the defining equation, we see that we have
+\begin{align*}
+&(\alpha+1)\ln(1+ q + p_2(\alpha)q^2 + \ldots + p_k(\alpha)q^k + o(q^k)) \\ &=  \ln(1+ p_2(\alpha)q + \ldots + p_k(\alpha)q^{k-1} + q^{-1}E_k(q)) + \alpha\ln(1 + \frac{1}{2}( q + 
+p_2(\alpha)q^2 + \ldots + p_k(\alpha)q^k + o(q^k))).
+\end{align*}
+Now, Taylor expand out $\ln(1+t) = t -\frac{t^2}{2} + \frac{t^3}{3} \ldots$, assume by induction that all terms of degree $q^{k-1}$ already agree, and drop everything that is $o(q^k)$.  One is left with an equality that can be rearranged to some sum of polynomials times $q^k$ is equal to $q^{-1} E_k(\alpha)$, so one can then write $E_k(\alpha) = p_{k+1}(\alpha)q^{k+1} + o(q^{k+1})$.  As for the degree, one sees that each individual contribution to the sum of polynomials is a product of $p_i$s with the indicies summing to $k$ times a rational number times one of $\alpha + 1$, $1$, or $\alpha$, that the degree of $p_{k+1}$ is at most $k$.
+
+The explicit formulae for the first two terms come from doing this procedure by hand.
+\end{proof}
+%Here is a table of values:
+%\begin{center}
+%\begin{tabular}{|c||c|c|c|c|} \hline 
+%$\alpha$ & $x$ & $x2^{\alpha} -1$ & $2^{-\alpha}$&$2^{2-\alpha}$\\ \hline\hline
+%2 & .618 & .236& .250 & 1.000 \\ \hline
+%3 & .191 & .532 &.125&.500 \\ \hline
+%4 & .0781 & .250 & .0625 & .250 \\ \hline
+%5 & .0353 & .128 & .0313 &.125  \\ \hline
+%6 & .0167 & .0682 & .0156 &.0625 \\ \hline
+%7 & .00810 & .0369 & .00781& .0313 \\ \hline
+%8 &.00389 &.0201 & .00391& .0156 \\ \hline
+%9 & .00197 &.0109 & .00195& .00781 \\ \hline
+%10 & .000982 & .00591 &.000977& .00391 \\ \hline
+%\end{tabular}
+%\end{center}
+\end{document}

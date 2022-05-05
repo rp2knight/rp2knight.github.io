@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's September 18, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+This week's riddler is about hunting for words:
+\begin{question}
+One of Ollie’s favorite online games is Guess My Word. Each day, there is a secret word, and you try to guess it as efficiently as possible by typing in other words. After each guess, you are told whether the secret word is alphabetically before or after your guess. The game stops and congratulates you when you have guessed the secret word. For example, the secret word was recently ``nuance,'' which Ollie arrived at with the following series of nine guesses: naan, vacuum, rabbi, papa, oasis, nuclear, nix, noxious, nuance.
+
+Each secret word is randomly chosen from a dictionary with exactly 267,751 entries. If you have this dictionary memorized, and play the game as efficiently as possible, how many guesses should you expect to make to guess the secret word?
+\end{question}
+Define $f(n)$ to be the expected number of guesses it takes with $n$ words.  Since the optimal strategy is clearly to guess the middle most word, which splits the set of words into the two smallest possible sets.  One gets the following recursion for $f(n)$:
+\begin{itemize}
+\item $f(1) = 1$ and $f(2) = \frac{3}{2}$
+\item $f(2k+1) = 1 + \frac{2k}{2k+1} f(k)$
+\item $f(2k) = 1 + \frac{1}{2}f(k) + \frac{k-1}{2k} f(k-1)$
+\end{itemize}
+This is a little messy, but notice that if you define $g(n) = nf(n)$, then $g$ admits a nice recursion:
+\begin{itemize}
+\item $g(1) = 1$ and $g(2) = 3$
+\item $g(2k+1) = 2k+1 + 2g(k)$
+\item $g(2k) = 2k + g(k) + g(k-1)$
+\end{itemize}
+This is something that is very easy to quickly code up on a computer, and one gets that $g(267751) = 4563001$, yielding $f(267751) = \frac{4563001}{267751} = 17.041956\ldots$.
+
+A natural question is ``How big is $f(n)$?''  One can see that $f(n) \approx 1 + f(\frac{n}{2})$, so it is natural to expect that $f(n) \approx \log_2(n)$.  To get a better sense of how big $f(n)$ is, I computed $\log_2(n)-f(n)$ for $n$ between $1$ and $2^{20}-1$, plotting $\log_2(n)-f(n)$ on the $y$-axis and $\log_2(n)$ on the $x$-axis:
+
+\includegraphics[scale=1.1]{Sep18Figure1.png}
+
+One can see that very quickly one has that $\log_2(n)-f(n)$ starts oscilating between ~$.91$ and $1$, being very close to $1$ when $n$ is close to a power of $2$ and close to $.91$ when $n$ is roughly $\sqrt{2}$ times a power of $2$.  One can compute $f(2^n-1)$ as follows:
+\begin{align*}
+g(2^n-1) & = 2^n - 1 + 2 g(2^{n-1}-1) \\
+& = (2^n - 1) + 2(2^{n-1} - 1 + 2 g(2^{n-2}-1))\\
+& = (2^n - 1) + (2^n - 2) + 4g(2^{n-2}-1) \\
+\vdots\\
+& = (2^n-1) + (2^n-2) + \ldots (2^n - 2^{n-1}) \\
+& = n2^n - (2^n-1) \\
+& = (n-1)(2^n-1) + n
+\end{align*}
+giving $f(2^n-1) = n-1 + \frac{n}{2^n-1}$.  One can similarly get $f(2^n) = n-1 + \frac{n+2}{2^n}$ to get that $\log_2(2^n)-f(2^n) = 1-\frac{n+2}{2^n}$, which tends to $1$ very quickly.  I don't have as good of a way to see where the troughs are.  I think it's still reasonable to say that, for $n \gg 0$, $\log_2(n)-1 < f(n) < \log_2(n) -.9$.
+\end{document}

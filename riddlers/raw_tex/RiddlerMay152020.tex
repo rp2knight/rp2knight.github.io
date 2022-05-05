@@ -1,0 +1,95 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\graphicspath{{C:/Users/Erick/Documents/Math/MiscStuff/images/}}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's May 15, 2020 Riddler}
+\author{Emma Knight}
+
+\begin{document}
+\maketitle
+This will be my solution to this week's 538 Riddler.  Full disclosure: I'm the one that submitted it.
+
+\begin{question}
+The fifth edition of Dungeons \& Dragons introduced a system of ``advantage and disadvantage.'' When you roll a die ``with advantage,'' you roll the die twice and keep the higher result. Rolling ``with disadvantage'' is similar, except you keep the lower result instead. The rules further specify that when a player rolls with both advantage and disadvantage, they cancel out, and the player rolls a single die. Yawn!
+
+There are two other, more mathematically interesting ways that advantage and disadvantage could be combined. First, you could have ``advantage of disadvantage,'' meaning you roll twice with disadvantage and then keep the higher result. Or, you could have ``disadvantage of advantage,'' meaning you roll twice with advantage and then keep the lower result. With a fair 20-sided die, which situation produces the highest expected roll: advantage of disadvantage, disadvantage of advantage or rolling a single die?
+
+Extra Credit: Instead of maximizing your expected roll, suppose you need to roll $N$ or better with your 20-sided die. For each value of $N$, is it better to use advantage of disadvantage, disadvantage of advantage or rolling a single die?
+\end{question}
+In order to answer this, I will introduce three random variables.  Let $X$ be the random variable associated to rolling one die, let $X_{da}$ be the random variable associated to disadvantage of advantage, and $X_{ad}$ be the variable associated to advantage of disadvantage.
+\begin{theorem}One has the following:
+\begin{enumerate}
+\item $E(X_{ad}) < E(X) < E(X_{da})$.
+\item For $2 \leq N \leq 8$, $P(X\geq N) < P(X_{ad} \geq N) < P(X_{da} \geq N)$.
+\item For $9 \leq N \leq 13$, $P(X_{ad}\geq N) < P(X \geq N) < P(X_{da} \geq N)$.
+\item For $14 \leq N \leq 20$, $P(X_{ad}\geq N) < P(X_{da} \geq N) < P(X \geq N)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+The idea of proof for part $1$ is to think about the case where you roll four different numbers ($1, 2, 3,$ and $4$, say), but forget how you grouped them up.  There are then three possible groupings: $(1, 2)$ and $(3, 4)$, $(1,3)$ and $(2,4)$, and $(1,4)$ and $(2,3)$.  Disadvantage of advantage produces a $2$, $3$, and $3$ for these three groupings, while advantage of disadvantage produces a $3$, $2$, and $2$ for these groupings.  Thus, disadvantage of advantage must be better than advantage of disadvantage and so should be the largest.
+
+The rigorous version of this argument is to introduce a boatload of new random variables.  Let $Y_1, Y_2, Y_3,$ and $Y_4$ be four independent fair twenty-sided dice, and let $Z_i = 21-Y_i$ (so $Z_i$ is the ``opposite'' result of $Y_i$).  Now, let $X'$ be the average of the $Y_i$s and the $Z_i$s, let $X'_{da}$ be the average of the three possible ways to do disadvantage of advantage of the $Y_i$s and the three possible ways to do disadvantage of advantage of the $Z_i$s, and similarly for $X'_{ad}$.  Then $E(X') = E(X)$ by linearity of expetation, and similarly for $X_{da}$ and $X_{ad}$.  Then one has (for essentially the reason pointed out in the paragraph above) that $X'_{ad} \leq X' \leq X'_{da}$, and these inequalities are strict with positive probability.  Thus, one gets part $1$ of the theorem.
+
+As for parts $2$ through $4$, assume that the odds of success on a roll are $x$.  Then the odds of success with advantage are $1-(1-x)^2 = 2x-x^2$, and the odds of success with disadvantage are $x^2$.  Thus, the odds of success for advantage of disadvantage are $2x^2-x^4$, and the odds of success for disadvantage of advantage are $4x^2-4x^3+x^4$.  Setting advantage of disadvantage and disadvantage of advantage equal, one gets $2x^2(1-x)^2 = 0$, so they are only equal when $x = 0$ or $1$, and otherwise disadvantage of advantage is better than advantage of disadvantage always.
+
+Setting disadvantage of advantage equal to a normal roll, one gets $x^4-4x^3+4x^2-x = 0$, or $x(x-1)(x^2-3x+1) = 0$.  There is therefore equality at $x = 0$, $x = 1$, and $x = \phi^{-2}$ (the equality at $\phi^2$ is not an actual solution).  Plugging in $x = 1/2$, one sees that disadvantage of advantage succeeds with probability $9/16$ there, so disadvantage of advantage is better than a natural roll when $x > \phi^{-2}$ and is worse when $x < \phi^{-2}$.
+
+Finally, setting advantage of disadvantage equal to a normal roll gives $x^4-2x^2+x = 0$, or $x(x-1)(x^2+x-1) = 0$, giving $x = 0$, $x = 1$, and $x = \phi^{-1}$ as solutions.  The odds of success for $x = 1/2$ for disadvantage of advantage is $7/16$, so disadvantage of advantage is better when $x > \phi^{-1}$ and worse when $x < \phi^{-1}$.
+
+Putting those three parts together, one gets the other three parts of the theorem.
+\end{proof}
+
+A feature of this argument is that it doesn't actually give expected values.  While computing this specific expected value is not too bad, it is much more interesting to do this for an $N$ sided die.  Write $X_{da, N}$ to be disadvantage of advantage for rolling an $N$-sided die (and similarly for $X_{ad, N}$).  Notice that $X_{ad, N} = N+1-X_{da, N}$, so we only really need to compute the expected value of $X_{da, N}$.
+
+Now, one has that $P(X_{da, N} \leq k) = 2\left(\frac{k}{N}\right)^2 - \left(\frac{k}{N}\right)^4$, so $P(X_{da, N} = k) = \frac{4k-2}{N^2} - \frac{4k^3-6k^2+4k-1}{N^4}$.  Thus, $$E(X_{da, N}) = \sum_{k = 1}^{N} \frac{4k^2-2k}{N^2} - \frac{4k^4-6k^3+4k^2-k}{N^4}.$$  This is a sum that can be done by hand with a lot of time in the privacy of your own room; alternatively one can ask a computer algebra program what the answer is, and it will spit out $E(X_{da, N}) = \frac{8N}{15} + \frac{1}{2}-\frac{1}{30N^3}.$  One then gets $E(X_{ad, N}) = \frac{7N}{15} + \frac{1}{2} + \frac{1}{30N^3}.$  Since $E(X_N) = \frac{N}{2} + \frac{1}{2}$, this shows the desired inequality directly.
+\end{document}

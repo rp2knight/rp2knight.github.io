@@ -1,0 +1,112 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's October 23, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+This week's riddler is about a game of 1v1 between LeBron James and Anthony Davis (hereafter referred to as LBJ and AD):
+\begin{question}
+Now that LeBron James and Anthony Davis have restored the Los Angeles Lakers to glory with their recent victory in the NBA Finals, suppose they decide to play a game of sudden-death, one-on-one basketball. They’ll flip a coin to see which of them has first possession, and whoever makes the first basket wins the game.
+
+Both players have a $50\%$ chance of making any shot they take. However, Davis is the superior rebounder and will always rebound any shot that either of them misses. Every time Davis rebounds the ball, he dribbles back to the three-point line before attempting another shot.
+
+Before each of Davis’s shot attempts, James has a probability $p$ of stealing the ball and regaining possession before Davis can get the shot off. What value of $p$ makes this an evenly matched game of one-on-one, so that both players have an equal chance of winning \emph{before} the coin is flipped?
+\end{question}
+Because I like suffering, I will handle the case where LBJ makes shots with probability $a$ and AD makes shots with probability $b$ (subject to $0\leq a, b \leq 1$ and not both $a$ and $b$ are $0$ so that the game ends).  Let $x$ be the probaility that LBJ wins if he wins the coin flip, and $y$ be the probability that LBJ wins if AD wins the coin flip.  To note, if at any point a posession starts with LBJ having the ball, then the odds that LBJ wins at that point is $x$, and if a posession starts with AD having the ball at any point, the odds that LBJ wins at that point is $y$.
+
+One gets the following two equations:
+\begin{align*}
+x & =  a + (1-a)y \\
+y & = px + (1-p)(1-b)y 
+\end{align*}
+Either LBJ makes it immediately (probability of $a$) and wins on the spot, or he misses and AD gets the ball.  Similarly, either LBJ steals immediately, LBJ fails the steal and AD makes, or LBJ fails the steal and AD misses.  One then starts solving this with bog-standard algebra:
+\begin{align*}
+y &  = px + (1-p)(1-b)y \\
+& = p(a + (1-a)y) + (1-p)(1-b)y \\
+& = pa + py - pay + (1-p)y - p(1-b)y \\
+& = pa + y - (pa+p(1-b))y \\
+(pa+p(1-b))y & = pa \\
+y & = \frac{pa}{pa+(1-p)b} \\
+x &= a + (1-a)y \\
+& = a + (1-a)\frac{pa}{pa+(1-p)b} \\
+& = \frac{a(pa+(1-p)b) + (1-a)pa}{pa+(1-p)b} \\
+& = \frac{pa+ (1-p)ab}{pa+(1-p)b}
+\end{align*}
+Now, we want $\frac{x+y}{2} = \frac{1}{2}$, or $x+y = 1$.  More plugging and chugging commences:
+\begin{align*}
+1 & =   \frac{pa+ (1-p)ab}{pa+(1-p)b} + \frac{pa}{pa+(1-p)b}\\
+& =  \frac{2pa+ (1-p)ab}{pa+(1-p)b} \\
+pa + (1-p)b & = 2pa + (1-p)ab \\
+pa+pb-pab & = b-ab \\
+p& = \frac{b-ab}{a+b-ab}
+\end{align*}
+If $a = b = \frac{1}{2}$, this gives $p = \frac{1}{3}$, $x = \frac{2}{3}$, and $y = \frac{1}{3}$.
+
+Of note: this formula only gives nonsense when $a = b = 0$.  Notice first off that the denominator is $1-(1-a)(1-b)$ which is only $0$ when $a = b = 0$, and is positive otherwise.  The numerator is always weakly less than the denominator (so $p \leq 1$ always) and equal to $b(1-a)$, which is nonnegative always (so $p \geq 1$ always).  Obviously, this should give nonsense when $a=b=0$ because the game literally cannot end!
+\end{document}

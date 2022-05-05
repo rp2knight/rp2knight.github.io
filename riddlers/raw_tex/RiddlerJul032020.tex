@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's July 3, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+ 
+\begin{document}
+\maketitle
+This week's riddler is a number theory exercise:
+\begin{question}
+When $N$ equals $50$, $N$ is twice a square and $N+1$ is a centered pentagonal number. After $50$, what is the next integer $N$ with these properties?
+\end{question}
+There is motivation about putting stars on a flag, but that's tangential to solving the problem.  Additionally, the $k^{th}$ centered pentagonal number is $\frac{5k^2 + 5k + 2}{2}$.
+
+Write $2x^2 + 1 = \frac{5y^2 + 5y + 2}{2}$.  After clearing a bunch of denominators and doing some rearranging, one gets $(4x)^2 - 5(2y+1)^2 = -5$.  Letting $X = 4x$ and $Y = 2y+1$, we get a solution to $X^2-5Y^2 = -5$, or $N_{\Z[\sqrt{5}]/\Z}(X+Y\sqrt{5}) = -5$.  To find all solutions of this, one takes one solution $\alpha$ and a fundamental totally positive unit $u$, and then gets that every solution is of the form $\pm u^i \alpha$ for some integer $i$\footnote{I'm sweeping a couple of details under the rug here.  For completeness, here they are: 1) there is only one ideal of norm $5$ in $\Z[\frac{1+\sqrt{5}}{2}]$ so there is only one equivalence class of solutions, and 2) because $X$ is an even integer there are no solutions that come from elements in $\Z[\frac{1+\sqrt{5}}{2}]$ that aren't also in $\Z[\sqrt{5}]$.}  There is an ``obvious'' solution: $\alpha = \sqrt{5}$ and that's the one I will use.  The fundamental totally positive unit is $9+4\sqrt{5} (= (2+\sqrt{5})^2)$.  Thus, every solution is of the form $X+Y\sqrt{5} = \pm(9+4\sqrt{5})^i\sqrt{5}$.
+
+Notice that choosing negative values of $i$ and choosing $+$ or $-$ don't change the underlying value of $N$; all this does is negate $X$, $Y$, or both.  To get the small solutions: $i = 0$ gives $0 + 1\sqrt{5}$ for $X = Y = 0$ and $N = 0$ which does indeed check out.  $i = 1$ gives $20+9\sqrt{5}$ for $X = 5$, $Y = 4$, and $N = 50$, which was the original solution.  $i = 2$ will be the solution to the riddler, and it gives $360+161\sqrt{5}$ for $x = 90$, $y = 80$, and $N = 16200$.  Thus, $N = 16200$ is the solution to the riddler.  One can keep on incrementing $i$ to get more solutions but I will not do that here.
+
+Alternatively, the equation can also be reduced to $(2x)^2 = 5y(y+1)$.  $5$ divides the right hand side and so it must divide the left hand side.  The right hand side is a square, so $5^2$ divides the right hand side, and so $5$ divides either $y$ or $y+1$.  If $5|y$, then notice that $y/5$ and $y+1$ are integers who are coprime and whose product is a square, so they are squares themselves.  Thus, one has a solution to $a^2-5b^2 = 1$ with $a, b \in \Z$.  Similar reasoning shows that if $5|y+1$ then there is a solution to $a^2-5b^2 = -1$ with $a, b \in \Z$.  Thus, every solution to this equation is of the form $\pm(2+\sqrt{5})^i$ with $i \in \Z$.  As before, choosing $+$ or $-$ and replacing $i$ with $-i$ only negates $a$ and/or $b$ and doesn't change the value of $y$.  From a solution of $a^2 - 5b^2 = \pm1$, one gets $y$ by seeing that $y$ is the smaller of $a^2$ and $5b^2$.
+
+$i = 0$ again gives $a = 1$, $b = 0$, $y = 0$, $x = 0$, and $N =0$ (the trivial solution).  $i = 1$ gives $a = 2$, $b = 1$, $y = 4$, $x = 5$, and $N = 50$ (the given solution).  Next, $i = 2$ gives $a = 9$, $b = 4$, $y = 80$, $x = 90$, and $N = 16200$ (the solution we got above).  Again, one can keep on incrementing $i$ and get larger solutions, but that is still something that will not be done here.
+
+But what about the other situation: when is $N$ a centered pentagonal number and $N+1$ twice a square?  The same manipulations as in the first solution give the equation $X^2-5Y^2 = 11$.  There are now two classes of solution to that: $X+Y\sqrt{5} = \pm (4+\sqrt{5}) (9+4\sqrt{5})^{i}$ and $X+Y\sqrt{5} = \pm (4-\sqrt{5}) (9+4\sqrt{5})^{j}$.  After noticing which choices of $X+Y\sqrt{5}$ give the same underlying value of $N$, one sees that you can always choose $+$ as the sign, and look at when $i \geq 0$ and $j \geq 1$ and get a complete set of solutions in $N$.
+
+Here are the first few small solutions: $i = 0$ gives $X+Y\sqrt{5} = 4+\sqrt{5}$ for $x = 1$, $y = 0$, and $N = 1$.  $j = 1$ gives $X + Y \sqrt{5} = 16 + 7\sqrt{5}$ for $x = 4$, $y = 3$, and $N = 31$.  $i = 1$ gives $X+Y\sqrt{5} = 56 + 25\sqrt{5}$ for $x = 14$, $y = 12$, and $N = 391$.  Finally $j = 2$ gives $X+Y\sqrt{5} = 284 + 127\sqrt{5}$ for $x = 71$, $y = 63$, and $N = 10081$.
+\end{document}

@@ -1,0 +1,166 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's March 25, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler is an astronomy puzzle:
+\begin{question}
+The astronomers of Planet Xiddler are back at it. They have developed a new technology for measuring the radius of a planet by analyzing its cross sections.
+
+And so, they launch a satellite to study a newly discovered, spherical planet. The satellite sends back data about three parallel, equally spaced circular cross sections which have radii $A$, $B$ and $C$ megameters, with $0 < A < B < C$. Based on these values, the scientists calculate the radius of the planet is $R$ megameters. To their astonishment, they find that $A$, $B$, $C$ and $R$ are all whole numbers!
+
+What is the smallest possible radius of the newly discovered planet?
+\end{question}
+
+The three-dimensionality of this problem isn't actually needed; this can be solved by looking at a cross-section of the planet that is perpendicular to the original three cross sections, and passing through the origin.  Then one has the following picture:
+
+\begin{tikzpicture}
+\draw (5, 0) arc (0:180:5);
+\draw[thin, lightgray] (-7, 0) -- (7,0);
+\draw[thin, lightgray] (0,0) -- (0, 7);
+\draw[very thick] (-4, 0) -- (-4, 3) node[left] {$(x-y, A)$};
+\draw[very thick] (-3, 0) -- (-3, 4) node[above left] {$(x, B)$};
+\draw[very thick] (-2, 0) -- (-2, {sqrt(21)}) node[above left] {$(x+y, C)$};
+\draw[dashed] (-2, {sqrt(21)}) -- (0, 0) node[pos=.5, above right] {$R$};
+\draw[thick] (-4, 0) to[out=-30, in=-150] node[below] {$y$} (-3, 0);
+\draw[thick] (-3, 0) to[out=-20, in=-160] node[below] {$-x$} (0, 0);
+\end{tikzpicture}
+
+One then has the following equations:
+\begin{align*}
+A^2 + (x-y)^2 & = R^2 \\
+B^2 + x^2 & = R^2 \\
+C^2 + (x+y)^2 & = R^2.
+\end{align*}
+
+One gets in order:
+\begin{align*}
+A^2 + C^2 + 2x^2 + 2y^2 & = 2B^2 + 2x^2 \\
+y^2 & = B^2 - \frac{A^2 + C^2}{2} \\
+C^2 + x^2 + 2xy + y^2 & = B^2 + x^2 \\
+2xy & = \frac{A^2 - C^2}{2} \\
+x & = \frac{A^2 - C^2}{4y} \\
+R^2 & = B^2 + \frac{(A^2 - C^2)^2}{16B^2 - 8A^2 - 8C^2}.
+\end{align*}
+
+In order for $R$ to be an integer, one needs that quantity on the right to be a perfect square of an integer.  Additionally, for this to be a real circle one needs $y^2 > 0$.  At this point, it is not too hard to loop over values of $A$, $B$, and $C$ to find integer values.  Additionally, since $C < R$, once you find one such quadruple, you only need to continue searching until you exhaust all values with $C$ less than that value of $R$.
+
+It turns out that the smallest such quadruple is $(2, 7, 8, 8)$ for $(A, B, C, R)$; this gives $x = -\sqrt{15}$ and $y = \sqrt{15}$ for the extra variables I introduced above.  Here is the corresponding picture:
+\begin{tikzpicture}[scale=.9]
+\draw (8,0) arc (0:180:8);
+\draw[thin, lightgray] (-9, 0) -- (9, 0);
+\draw[thin, lightgray] (0,0) -- (0, 9);
+\draw[very thick] ({-sqrt(60)}, 0) -- ({-sqrt(60)}, 2);
+\draw[thick] ({-sqrt(60)}, 2) to[out=-60, in=60] node[right] {$2$} (-{sqrt(60)}, 0);
+\draw[very thick] ({-sqrt(15)}, 0) -- ({-sqrt(15)}, 7);
+\draw[thick] ({-sqrt(15)}, 7) to[out=-70, in=70] node[right] {$7$} (-{sqrt(15)}, 0);
+\draw[very thick] (0, 0) -- (0, 8);
+\draw[thick] (0, 8) to[out=-70, in=70] node[right] {$8$} (0, 0);
+\draw[thick] ({-sqrt(60)}, 0) to[out=-20, in=200] node[below] {$\sqrt{15}$} (-{sqrt(15)}, 0);
+\draw[thick] ({-sqrt(15)}, 0) to[out=-20, in=200] node[below] {$\sqrt{15}$} (0, 0);
+\end{tikzpicture}
+
+Finally, here is the code:
+\begin{verbatim}
+import itertools
+import math
+
+##top is the highest value of C I search for.  solns
+##is a list of all the valid triples (A, B, C, R).
+##small is the smallest value of R I have found so far.
+##best is the triple with the smallest value of R.
+##checks is a list of all possible triples (A, B, C)
+
+top = 100
+solns = []
+small = top*2
+best = []
+checks = itertools.combinations(range(1, top+1), 3)
+
+##This loop finds all solutions and determines which one
+##has the smallest value of R.
+
+for check in checks:
+    a = check[0]
+    b = check[1]
+    c = check[2]
+    if(16*(b**2)-8*(a**2)-8*(c**2) > 0):
+        if(((a**2 - c**2)**2) % (16*(b**2)-8*(a**2)-8*(c**2)) == 0):
+            r = math.sqrt(((a**2 - c**2)**2) // (16*(b**2)-8*(a**2)-8*(c**2)) + b**2)
+            if r.is_integer():
+                solns.append([a, b, c, r])
+                if (r < small):
+                    small = r
+                    best = [a, b, c, r]
+
+print(solns)
+print(best)
+\end{verbatim}
+\end{document}

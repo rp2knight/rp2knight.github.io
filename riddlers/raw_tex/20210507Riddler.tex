@@ -1,0 +1,93 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's May 7, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Fred Blundun, is about a cooperative game between two people:
+\begin{question}
+Martina and Olivia each secretly generate their own random real number, selected uniformly between $0$ and $1$. Starting with Martina, they take turns declaring (so the other can hear) who they think probably has the greater number until the first moment they agree.  They are playing as a team, hoping to maximize the chances they correctly predict who has the greater number.
+
+For any given round with randomly generated numbers, what is the probability that the person they agree on really does have the bigger number?
+
+\emph{Extra credit}: Martina and Olivia change the rules so that they stop when Olivia first says that she agrees with Martina. That is, if Martina says on her turn that she agrees with Olivia, that is not a condition for stopping. Again, if they play to maximizing their chances, what is the probability that the person they agree on really does have the bigger number?
+\end{question}
+Before getting started, I will make a key assumption: Martina and Olivia are simply telling the truth when they say ``my number is probably larger/smaller.''  If they don't then the following simple strategy gets arbitrarily good odds of winning: on the first round, Martina says her number is probably larger if it is larger than $1/N$ and probably smaller if it is smaller than $1/N$, and Olivia does the same.  The second round, they do the same but with $2/N$, and so on.  The only way they lose if both of their numbers lie in an interval of the form $[a/N, (a+1)/N]$ and Olivia's number is smaller than Martina's number, which happens with probabilty $1/2N$.
+
+Ignoring that chicanary, let's say the game starts with Martina saying that Olivia's number is probably smaller, the other case being symmetric.  This is true only if Martina's number is less than $1/2$, as Olivia's number is uniformly distributed in $[0, 1]$.  Now, Olivia knows that Martina's number is uniformly distributed in $[0, 1/2]$, so Olivia will assert her number is larger than Martina's number if her number is greater than $1/4$ (and so the game ends), and will assert her number is less than Martina's number if her number is less than $1/4$.
+
+If Olivia says that her number is smaller than Martina's number, then we are basically in the same situation that we were in after the first turn with the roles swapped: Martina's number is uniformly distributed in $[0, 1/2]$, Olivia's number is uniformly distributed in $[0, 1/4]$, and it's Martina's turn.  Since only the relative lengths of the intervals matter, this means that the probability of victory given that the game doesn't end after the second turn is equal to the probability of victory given that the game ends on the second turn.
+
+So we may assume that Martina says her number is probably smaller than Olivia's, and Olivia says her number is probably larger than Martina's.  Then the odds of defeat are $1/12$: Martina's number needs to be in $[1/4, 1/2]$ (a $1$ in $2$ chance), Olivia's number needs to be in $[1/4, 1/2]$ (a $1$ in $3$ chance), and in this interval, Martina's number needs to be larger than Olivia's number (again, a $1$ in $2$ chance).  Thus, the odds that the game ends in a victory on the second round given that it ends on the second round is $11/12$.  By the observation above, the odds that the game ends in victory is $11/12$.
+
+But what about the extra credit?  Let's assume that the game again starts with Martina saying that Olivia's number is probably larger.  If Olivia says that Martina's number is probably smaller, then this is exactly the same as before.  So we only need to think about what happens when Olivia says Martina's number is probably larger.  As before, we have that Olivia's number is uniformly distributed in $[0, 1/4]$, and Martina's number is uniformly distributed in $[0, 1/2]$.  Things now diverge from the normal game if Martina says that her number is probably larger than Olivia's, where the game no longer ends.  However, this implies that Martina's number is uniformly distributed in $[1/8, 1/2]$, and so for Olivia's number to be probably larger, it needs to be at least $5/16$.  But Olivia's number is at most $1/4$, so Olivia immediately reasserts her number is probably smaller than Martina's number.
+
+This observation is more general: once there's agreement, even if that doesn't end the game, there will continue to be agreement until the game actually ends.  So the patience by the two women doesn't accomplish anything other than making them play for a little bit longer.
+
+\end{document}

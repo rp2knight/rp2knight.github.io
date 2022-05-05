@@ -1,0 +1,103 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\graphicspath{{C:/Users/Erick/Documents/Math/MiscStuff/images/}}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's January 31, 2020 Riddler}
+\author{Emma Knight}
+\begin{document}
+\maketitle
+
+The riddler this week is the following:
+
+\begin{question}
+What is the largest possible volume of a pyrmad whose base is a regular polygon with side lengths $2$, and such that each face is a $30-75-75$ isosceles triangle?
+\end{question}
+The side length of $2$ is, of course, arbitrary and chosen for convienece.  Define $f(n)$ to be the volume for an $n$-gon, and the question is asking which integer $n$ between $3$ and $11$ maximizes $f(n)$.
+
+To compute $f(n)$, we chop the pyramid into $2n$ pieces, corresponding to chopping the polygon into $2n$ right triangles each of which has verticies the center of the triangle, the midpoint of one of the sides, and the corner next to one of those sides.  See the picture below for an image of one of these tetrahedra.
+
+\includegraphics[scale=.5]{tetrahedron.png}
+
+By construction, angles $ACD$, $BCD$, $BAC$, and $BAD$ are all right angles.  Additionally, $CBD$ is a $\frac{\pi}{12}$ angle, and $CAD$ is a $\frac{\pi}{n}$ angle.  Finally, $CD$ has side length $1$.  Thus, $CA = \cot\left(\frac{\pi}{n}\right)$, $CB = \cot\left(\frac{\pi}{n}\right)$, and $AB = \left(\cot^2\left(\frac{\pi}{12}\right) - \cot^2\left(\frac{\pi}{n}\right)\right)^{\frac{1}{2}}$.  Consequently, the volume of the tetrahedron is $\frac{1}{6}\cot\left(\frac{\pi}{n}\right) \left(\cot^2\left(\frac{\pi}{12}\right) - \cot^2\left(\frac{\pi}{n}\right)\right)^{\frac{1}{2}}$ and so $f(n) = \frac{n}{3}\cot\left(\frac{\pi}{n}\right) \left(\cot^2\left(\frac{\pi}{12}\right) - \cot^2\left(\frac{\pi}{n}\right)\right)^{\frac{1}{2}}$.
+
+This looks like a mess, and doing calculus looks tedious at best.  However, we are only interested in the values of $f(n)$ for $n=3, \ldots, 11$, and so we just ask a computer what those values are.  Asking sagemath, one gets the following table of values of $f$:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+$n$ & $f(n)$ \\
+\hline
+\hline
+$3$ & $2.1288$ \\
+\hline
+$4$ & $4.7941$\\
+\hline
+$5$ & $7.9577$\\
+\hline
+$6$ & $11.4516$\\
+\hline
+$7$ & $15.0251$\\
+\hline
+$8$ & $18.3223$\\
+\hline
+$9$ & $20.8186$\\
+\hline
+$10$ & $21.6560$\\
+\hline
+$11$ & $19.0593$\\
+\hline
+\end{tabular}
+\end{center}
+Thus, $f$ is maximized at $n = 10$.
+
+Why is this so high?  Doesn't the pyramid get flatter as $n$ gets larger?  Well, the term for the area of the base is $\frac{n}{3}\cot\left(\frac{\pi}{n}\right)$, which is roughly $\frac{n^2}{3\pi}$ (using the fact that $\cot(x) \approx 1/x$ for $x$ close to $0$).  Conversely, using calculus, one sees that the height is approximately $\left(2\cot\left(\frac{\pi}{12}\right)\left(-\csc^2\left(\frac{\pi}{12}\right)\right)\left(\frac{\pi}{12} - \frac{\pi}{n}\right)\right)^{\frac{1}{2}}$.  After pulling out constants, this is roughly $C\left(\frac{12-n}{n}\right)^{\frac{1}{2}}$, which isn't close to small enough to seriously effect the area without $n$ being really close to $12$.
+\end{document}

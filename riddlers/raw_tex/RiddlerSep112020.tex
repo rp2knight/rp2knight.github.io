@@ -1,0 +1,97 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's September 11, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+Today's riddler is about the Tour de FiveThirtyEight:
+\begin{question}
+At the moment, you are racing against three other riders up a mountain. The first rider over the top gets $5$ points, the second rider gets $3$, the third rider gets $2$, and the fourth rider gets $1$.
+
+All four of you are of equal ability - that is, under normal circumstances, you all have an equal chance of reaching the summit first. But there’s a catch - two of your competitors are on the same team. Teammates are able to work together, drafting and setting a tempo up the mountain. Whichever teammate happens to be slower on the climb will get a boost from their faster teammate, and the two of them will both reach the summit at the faster teammate’s time.
+
+As a lone rider, the odds may be stacked against you. In your quest for the polka dot jersey, how many points can you expect to win on this mountain, on average?
+\end{question}
+Let's call the riders $A$, $B$, $C1$, and $C2$, with $A$ being you.  There are $24$ possible finishes for the four racers, but since distinguishing between $C1$ and $C2$ is irrelevant, there are only $12$ relevant orders.  I will list them below together with the number of points you get:
+\begin{itemize}
+\item $ABCC - 5$
+\item $ACBC - 5$
+\item $ACCB - 5$
+\item $BACC - 3$
+\item $CABC - 2$
+\item $CACB - 2$
+\item $BCAC - 1$
+\item $CBAC - 1$
+\item $CCAB - 2$
+\item $BCCA - 1$
+\item $CBCA - 1$
+\item $CCBA - 1$
+\end{itemize}
+One gets a total score of $29$, so the average result is $\displaystyle{\frac{29}{12}}$.  
+\end{document}

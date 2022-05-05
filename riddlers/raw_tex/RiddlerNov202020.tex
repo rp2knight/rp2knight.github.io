@@ -1,0 +1,96 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's November 13, 2020 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+This week's riddler, from Patrick Lopatto, is about passing cranberry sauce around a thanksgiving table:
+\begin{question}
+To celebrate Thanksgiving, you and 19 of your family members are seated at a circular table (socially distanced, of course). Everyone at the table would like a helping of cranberry sauce, which happens to be in front of you at the moment.
+
+Instead of passing the sauce around in a circle, you pass it randomly to the person seated directly to your left or to your right. They then do the same, passing it randomly either to the person to their left or right. This continues until everyone has, at some point, received the cranberry sauce.
+
+Of the $20$ people in the circle, who has the greatest chance of being the last to receive the cranberry sauce?
+\end{question}
+Let's suppose there are $k$ people at the table, and you don't initially start with the sauce.  I claim that the probability that you are the last person to get the sauce is $1/(k-1)$.
+
+The first goal is to show that, if neither you nor the person to your hasn't yet had the sauce, then the probability that you are the last person to have the sauce is $1/(k-1)$ independently of who has already had the sauce.  To wit, since the set of people who have had the sauce at any point in time will be a continuous arc on the circle, the only question relevant to whether you are the last person to get the sauce is whether you get it before the person on your right.  Number everyone at the table, starting with you at $0$, the person on your left at $1$, and so on until you get the person on your right at $k-1$.  Additionally, let $p_i$ be the probability that the person on your right gets the sauce before you given that person $i$ currently has the sauce.  One sees the following equations for the $p_i$s:
+\begin{align*}
+p_0 &= 0 \\
+p_{k-1} & = 1 \\
+p_i & = \frac{p_{i-1} + p_{i+1}}{2}&1\leq i \leq k-2
+\end{align*}
+It is not too hard to see that $p_i = i/(k-1)$ from these equations is the unique solution, which shows the first thing I wanted to show.  Notice additionally, since this is symmetric, the same result holds if the person on your right gets the sauce before you or the person on your left, then the probability that you are the last person to get the sauce is $1/(k-1)$.
+
+But now I'm done: if you wait until the first time that someone adjacent to you gets the sauce, you get into the scenario above where either the person on your right gets the sauce before you or the person on your left gets the sauce, or the person on your left gets the sauce before you or the person on your right does, and in either circumstance, you then have a $1$ in $k-1$ chance of being the last person with the sauce.
+
+Finally, just to put it all together, here is the full set of probabilities of whether you will be the last person with the sauce.  If you have already received the sauce and someone else hasn't, then the probability of being the last person with the sauce is $0$.  If you haven't received the sauce, but everyone else has, then the probability of being the last person with the sauce is $1$.  If neither you nor the person to your right has received the sauce, but the person to your left has at some point, then the probability of being the last person with the sauce is $a/(k-1)$, with $a$ being how many people to your left the sauce is.  That statement is symmetrical, and the same thing is true if you swap left and right.  Finally, if none of you, the person to your left, and the person to your right have received the sauce, then the probability of being the last person with the sauce is $1/(k-1)$.
+
+It is easy to check that these satisfy the equations needed to be true and so must be the solution: first of all, it is not too hard to see that the probability that somebody is the last person with the sauce is $1$.  Secondly, it is also easy to see that the probability of being the last person with the sauce assuming the person to your left has received the sauce at some point is the average of the two adjacent positions is also simple (as this is just saying $a/(k-1)$ is the average of $(a-1)/(k-1)$ and $(a+1)/(k-1)$; the only other thing to check is that it does line up at the edges which is also easy to see).  Finally, if you are in the state where none of you, the person to your left, and the person to your right have received the sauce, then every position that is one sauce move away also has you having a probability $1/(k-1)$ of receiving the sauce (either it's the same type of state, or the sauce moves to someone sitting next to you).
+\end{document}

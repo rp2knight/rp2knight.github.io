@@ -1,0 +1,93 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's June 18, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+Today's riddler, courtesy of Ben Edelstein, is about driving randomly at intersections:
+\begin{question}
+Eight two-way roads all converge at a single intersection. Two cars are heading toward the single intersection from different directions chosen at random. Upon reaching the intersection, they both turn in a random direction (where proceeding straight is a possible ``turn'') - however, neither car pulls a U-turn (i.e., heads back the way it came).
+
+In some cases, the paths of the cars can be drawn so that they do not cross.  However, in other cases, the paths \emph{must} cross.  In this event, the cars will crash.
+
+What is the probability the cars will crash? (If both cars head off in the same direction, that also counts as a crash.)
+
+\emph{Extra credit}: As the number of two-way roads converging at the intersection approaches infinity, what value does the probability of crashing approach?
+\end{question}
+Assume the intersection is an $n+1$-way intersection (so the problem here is when $n = 7$).  Paint one car red and one car blue.  There are $(n+1)n^3$ equally likely setups for the cars here: $n+1$ places for the first car to start, $n$ for the second car, and $n$ routes for each of the cars to turn onto.  Of these, there are $(n+1)n(n-1)(n-2)$ ways in which the four distinguished paths are all distinct, and so $(n+1)n(3n-2)$ ways in which at least two of the paths are the same.
+
+If two of the four distinguished paths are the same, then the two cars must necessiarly crash.  Thus, we only need to think about when the four distinguished paths are different.  If one chooses first the four paths, there are $24$ possibilities of having the two cars take these four paths.  The cars will crash if, when read cyclically around the center, the paths alternate red-blue-red-blue (or vise-versa), which happens in exactly $8$ of the $24$ possabilities.  Thus, there are an aditional $\frac{1}{3}(n+1)n(n-1)(n-2)$ possible crashes.
+
+Putting it all together, one has that the probability of crashing is
+\begin{align*}
+\frac{\frac{1}{3}(n+1)n(n-1)(n-2) + (n+1)n(3n-2)}{(n+1)n^3} & = \frac{(n+1)n(n^2 - 3n + 2 + 3(3n-2))}{3(n+1)n^3} \\
+& = \frac{n^2 + 6n - 4}{3n^2}.
+\end{align*}
+When $n = 7$ (the original problem), one gets a probability of $\frac{29}{49} \approx 59.18\%$.  When $n \rightarrow \infty$, the linear and constant terms in the numerator don't matter and one gets $\frac{1}{3}$.  One way to think about this result is that this is the probability that two randomly chosen chords on a circle intersect (and indeed, that calculation informed my calculation above!).
+\end{document}

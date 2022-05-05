@@ -1,0 +1,175 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\graphicspath{{C:/Users/Erick/Documents/Math/MiscStuff/images/}}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+
+\title{FiveThirtyEight's April 10, 2020 Riddler}
+\author{Emma Knight}
+
+\begin{document}
+\maketitle
+This weeks riddler is the following:
+\begin{question}
+Over the course of three days, suppose the probability of any spammer making a new comment on this week's Riddler column over a very short time interval is proportional to the length of that time interval. (For those in the know, I'm saying that spammers follow a Poisson process.) On average, the column gets one brand-new comment of spam per day that is not a reply to any previous comments. Each spam comment or reply also gets its own spam reply at an average rate of one per day.
+
+After the three days are up, how many total spam posts (comments plus replies) can I expect to have?
+\end{question}
+
+To solve this question, I will introduce some notation.  Let $X$ be the random variable that is the amount of time (in days) until the first comment spawns and let $p(t)$ be the probability density function for $X$, and $q(t)$ be the cumulative density function for $X$.  Also, let $f(x)$ be the expected number of spam comments that spawn after $x$ days.  Then ultimately we are interested in the value $f(3)$ (but it is clearly much easier to compute $f(x)$ for all $x$ and plug in $x = 3$).
+
+To compute $q$ and $p$, notice that, by definition, $q' = p$.  Additionally, one has that $q(t+h) - q(t) = Ch(1-q(t))$ for $h$ sufficiently small, as the probability that a comment spawns in the interval $[t, t+h]$ is $h$ by definition, and the probability that it is the first comment is $(1-q(t))$.  Thus, one gets that $q'(t) = 1-q(t)$, and so $q(t) = 1 - e^{-t}$ (there is nominally a constant that should be floating around but you know that $q(0) = 0$ so this form is correct; also I will just suppress the fact that $q(t) = 0$ for $t < 0$).  Taking the derivative, one gets $p(t) = e^{-t}$.
+
+Now, to compute $f$, notice that, if the first comment spawns after $t$ days, then $1$ comment is already there, and there are now two threads to spawn new comments, which have $x-t$ days to do so.  Thus, $f(x) = \int_0^x (1+2f(x-t))p(t)dt = \int_0^x (1+2f(t))p(x-t)dt = \int_0^x(1+2f(t))e^{t-x}dt$.  If you wish to skip the hard work, then notice that $f(x) = e^x - 1$ satisfies this:
+\begin{align*}
+\int_0^x(1+2(e^t - 1))e^{t-x}dt & = \int_0^x 2e^{2t-x} - e^{t-x} dt \\
+& = \left(e^{2t-x}\right|_0^x - \left(e^{t-x}\right|_0^x \\
+& = e^x - e^{-x} - (1 - e^{-x}) \\
+& = e^x - 1.
+\end{align*}
+It is also not to hard to see that any solution is unique, and so $f(x) = e^x - 1$, giving $e^3 - 1 \approx 19.086$ spam comments on average.
+
+But since you are still here, you do want to see the work.  Start with the equation $f(x) = \int_0^x(1+2f(t))e^{t-x}dt$.  Differentiating both sides with respect to $x$ gives $f'(x) = 1 + 2f(x) + \int_0^x(1+2f(x))(-e^{t-x})dt = 1 + 2f(t) - f(t) = 1 + f(t)$.  Thus, $(f+1)'(x) = (f+1)(x)$ (using the notation $(f+1)(x) = f(x) + 1$), and so $(f+1)(x) = Ce^x$ or $f(x)  = Ce^x - 1$ for some constant $C$.  Now, plug $f$ into the equation $f(x) = \int_0^x(1+2f(t))e^{t-x}dt$ and one gets:
+\begin{align*}
+f(x) & = \int_0^x(1+2(Ce^t - 1))e^{t-x}dt \\
+& = \int_0^x 2Ce^{2t-x} - e^{t-x} dt \\
+& = \left(Ce^{2t-x}\right|_0^x - \left(e^{t-x}\right|_0^x \\
+& = Ce^x - Ce^{-x} - (1 - e^{-x}) \\
+& = Ce^x - 1 + (1-C)e^{-x} \\
+& = f(x) + (1-C)e^{-x}.
+\end{align*}
+Thus $C = 1$ and so $f(x) = e^x - 1$.
+
+But what about the whole distribution?  There is more to this problem than just the raw average, after all.  If one wants to know what the total distribution is, then I need to make some notation.  Define $g(x, n)$ to be the probability that there are exactly $n$ spam messages after $x$ days.  Then, we have
+\begin{theorem}
+One has that $g(x, n) = e^{-x}(1-e^{-x})^n$.
+\end{theorem}
+\begin{proof}
+First off, notice that $g(x, 0) = 1-q(x) = e^{-x}$.  This is because the probability that you have zero spam messages is exactly the probability that the first spam message spawns after $x$ days, which is $1-q(x)$.
+
+I will write $g'(x, n)$ for the $x$ derivative of $g(x, n)$ to save space.  Now, one has that $g(x + h, n) - g(x, n) \approx h(ng(x, n-1) - (n+1)g(x, n))$, as there is an $hng(x, n-1)$ probability that there were $n-1$ comments at time $x$ but $n$ comments at time $x+h$, and an $h(n+1)g(x, n)$ probability that there were $n$ comments at time $x$ but $n+1$ comments at time $x+h$.  Thus, $g'(x, n) = ng(x, n-1) - (n+1)g(x, n)$.  Additionally, for $n > 0$, $g(0, n) = 0$, which pins down the solution uniquely.
+
+At this point, one can start finding solutions one by one until you notice the claimed pattern.  Once you notice the pattern though, it is much easier to verify that the solution you found solves it; letting $h(x, n) = e^{-x}(1-e^{-x})^n$ one gets:
+\begin{align*}
+h'(x, n) & = \frac{d}{dx}\left(e^{-x}(1-e^{-x})^n\right) \\
+& = -e^{-x}(1-e^{-x})^n + n e^{-x}(1-e^{-x})^{n-1}(e^{-x}) \\
+& = -e^{-x}(1-e^{-x})^n + n e^{-x}(1-e^{-x})^{n-1}(1-(1-e^{-x})) \\
+& = -e^{-x}(1-e^{-x})^n + n e^{-x}(1-e^{-x})^{n-1} - ne^{-x}(1-e^{-x})^n \\
+& = -h(x, n) + n h(x, n-1) - n h(x, n) \\
+& = n h(x, n-1) - (n+1) h(x, n).
+\end{align*}
+Moreover, $h(0, n) = 1\cdot 0^n = 0$ if $n > 0$, so $g(x, n) = h(x, n) = e^{-x}(1-e^{-x})^n$.
+\end{proof}
+Two sanity checks are in order.  First off, to see that this is indeed a distribution, notice that:
+\begin{align*}
+\sum_{n \geq 0}g(x, n) & = \sum_{n\geq 0} e^{-x}(1-e^{-x})^n \\
+& = e^{-x} \sum_{n\geq 0}(1-e^{-x})^n \\
+& = e^{-x}\frac{1}{1-(1-e^{-x})} \\
+& = 1.
+\end{align*}
+Additionally, we should check that it gives the correct expected value:
+\begin{align*}
+\sum_{n \geq 0}ng(x, n) & = \sum_{n\geq 0} ne^{-x}(1-e^{-x})^n \\
+& = e^{-x}\sum_{n\geq0}(n+1-1)(1-e^{-x})^n \\
+& = e^{-x}\sum_{n\geq 0}(n+1)(1-e^{-x})^n - e^{-x}\sum_{n\geq0}(1-e^{-x})^n \\
+& = e^{-x}\frac{1}{(1-(1-e^{-x}))^2} - e^{-x}\frac{1}{1-(1-e^{-x})} \\
+& = e^x - 1.
+\end{align*}
+And now, the moment of full disclosure.  This formula was not found by solving differential equations and noticing patterns.  Rather, I simulated the process, looked at the distribution, and noticed that it looked like exponential decay.  If one grants that $g(x, n) = C_1(x)C_2(x)^n$, then one has that $\displaystyle{\sum_{n\geq 0} C_1(x)C_2(x)^n} = 1$ or that $\frac{C_1(x)}{1-C_2(x)} = 1$, which implies that $C_2 = 1-C_1$.  Then one can do a similar thing with the identity $\displaystyle{\sum_{n\geq0} n C_1(x)(1-C_1(x))^n} = e^x - 1$ to get that $C_1(x) = e^x$.  As penance, I will also include the code that I ran, together with a couple of pictures of it's output.  First up, the code in python:
+\pagebreak
+\begin{verbatim}
+import random
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+samples = 1000000 #total number of samples
+count = 0         #total amount of spam messages across all samples
+m = 0             #maximum number of spam messages across all samples
+t = 1000          #number of intervals each day is broken into
+d = 3             #number of days
+set = []          #the multiset of the number of spam messages across all samples
+for test in range(samples):
+    total = 1               #the total number of messages spammers can 
+                            #reply to in this sample
+    for i in range((d*t)):  
+        add = 0             #the number of new messages spammers can reply to 
+                            #in this time interval
+        for j in range(total):
+            if (random.randrange(0, t) == 0):
+                add += 1    #one new message spawns in reply to a previous one 
+                            #with probability 1/t
+        total += add
+    if (test % 1000 == 0):
+        print(test/1000)    #make sure the program is still chugging
+    count += total - 1      
+    m = max(m, total-1)
+    set.append(total-1)
+print(count/samples)
+print(m)
+displayset = []             #for graphing
+displaygraph = []
+for k in range(m+1):
+    set.append(k)
+    displayset.append((set.count(k)-1)/samples)
+    displaygraph.append((math.exp(-3)*((1-math.exp(-3))**k)))
+plt.plot(range(m+1),displaygraph,'b-')
+plt.plot(range(m+1),displayset,'r-')
+plt.show()
+\end{verbatim}
+Additionally, here is a picture of the output:
+
+\includegraphics[scale=.5]{Figure_1.png}
+
+The red line is the sampled rate, and the blue line is the function $e^{-3}(1-e^{-3})^n$.  Since they kind of blend in, here is a version that is zoomed into a smaller segment so that you can see that they are actually different curves:
+
+\includegraphics[scale=.5]{Figure_2.png}
+\end{document}

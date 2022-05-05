@@ -1,0 +1,124 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's January 8, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+
+\begin{document}
+\maketitle
+This weeks riddler is about archery:
+\begin{question}
+Robin of Foxley has entered the FiveThirtyEight archery tournament. Her aim is excellent (relatively speaking), as she is guaranteed to hit the circular target, which has no subdivisions - it's just one big circle. However, her arrows are equally likely to hit each location within the target.
+
+Her true love, Marian, has issued a challenge. Robin must fire as many arrows as she can, such that each arrow is closer to the center of the target than the previous arrow. For example, if Robin fires three arrows, each closer to the center than the previous, but the fourth arrow is farther than the third, then she is done with the challenge and her score is four.
+
+On average, what score can Robin expect to achieve in this archery challenge?
+
+\emph{Extra credit}: Marian now uses a target with $10$ concentric circles, whose radii are $1$, $2$, $3$, etc., all the way up to $10$ - the radius of the entire target. This time, Robin must fire as many arrows as she can, such that each arrow falls within a smaller concentric circle than the previous arrow. On average, what score can Robin expect to achieve in this version of the archery challenge?
+\end{question}
+One can get the answer easily from the following claim:
+\begin{claim}
+For $n \geq 2$, the probability that Robin's score is $n$ is exactly $\displaystyle{\frac{n-1}{n!}}$.
+\end{claim}
+Of note: Robin must score at least two points, as she is guaranteed a second shot.
+
+Assuming the claim for now, one then has that the expected score is $$\sum_{n \geq 2} n\frac{n-1}{n!} = \sum_{n \geq 2} \frac{1}{(n-2)!} = \sum_{n \geq 0} \frac{1}{n!} = e.$$
+
+So why is the claim true?  One can compute the probability that Robin's score is $n$ by imagining her shooting $n$ arrows at the target, and seeing if these arrows are in an order so that Robin would have scored $n$.  For this to be the case, the first arrow fired must be further outside than the second arrow, which must be further outside than the third arrow, and so on until the $n-1$st arrow.  The $n$th arrow must be further outside than the $n-1$st arrow.  One can then immediately write down all the valid orders of the arrows (each list below shows the positions of the arrows going from most outside to most inside):
+
+$1, 2, \ldots, n-2, n, n-1 \\
+1, 2, \ldots, n, n-2, n-1 \\
+\vdots \\
+1, 2, n, \ldots, n-2, n-1 \\
+1, n, 2, \ldots, n-2, n-1 \\
+n, 1, 2, \ldots, n-2, n-1$
+
+One sees that $1$ through $n-1$ must be in the same order, and that there are $n-1$ places to insert the $n$ in this list, so there are $n-1$ valid lists out of $n!$ total lists, giving a probability of $\displaystyle{\frac{n-1}{n!}}$.
+
+Another way to see this: define $g(r)$ to be the expected number of additional arrows that Robin will fire, given that her previous arrow landed $r$ units away from the center of the target (with the convention that the target has a radius of $1$ unit).  One has that the probability density function for the random variable "distance from the center of a random point in a circle" is $2r$, so one has that $g(r) = 1 + \int_0^r 2tf(t)dt$: Robin always gets to fire another shot, and then gets to continue if this shot is closer to the center than the previous one.  Taking the derivative, one gets $g'(r) = 2rg(r)$.  This can easily be solved to see that $g(r) = Ce^{r^2}$.  Looking at the actual equation, one has that $g(0) = 1$, giving $C = 1$, $g(r) = e^{r^2}$, and that the final answer is $g(1) = e$\footnote{If you want to suffer, you can compute $f(r)$ using the above method.  Notice that the probability that Robin's score is one is now $1-r^2$, and for $n \geq 2$, the probability Robin's score is $n$ is $r^{2n-2}(1-r^2)/((n-1)!) + r^{2n}(n-1)/(n!)$ (the first $n-1$ darts must lie inside the circle of radius $r$; either they are in the right order and the last dart lies outside, or all the darts lie inside in which case the probability that everything works is $(n-1)/(n!)$, as above.  Now, you can sum everything up and it does amazingly all work out.}.
+
+As for the extra credit, define $f(n)$ to be the expected number of additional arrows Robin will fire, given that her previous arrow lied inside circle $n$ but not circle $n-1$.  Then the answer to the extra credit is $1 + \displaystyle{\frac{1}{100} f(1) + \frac{3}{100} f(2) + \cdots + \frac{19}{100}f(100)}$.  All that's left is to compute $f(n)$ for the relevant $n$.
+
+One can easily see the following:
+\begin{align*}
+f(1) & = 1 \\
+f(2) & = 1 + \frac{1}{100}f(1) \\
+f(3) & = 1 + \frac{1}{100}f(1) + \frac{3}{100}f(2) \\
+& \vdots \\
+f(10) & = 1 + \frac{1}{100}f(1) + \cdots + \frac{17}{100} f(9)
+\end{align*}
+One can then use a computer and compute that the expected value is $2.55852849947637381075$ (if you have access to arbitrary size integers then you can beat floating point errors by multiplying $f(n)$ by $100^{n-1}$ and the final answer by $100^{10}$).
+
+Alternatively, one can see that $\displaystyle{f(n) - f(n-1) = \frac{2n-1}{100}}$, or $\displaystyle{f(n) = \left(1+\frac{2n-1}{100}\right)f(n-1)}$.  One can iterate this process and see that $f(n) = \displaystyle{\prod_{i=1}^{n-1}\left(1+\frac{2i-1}{100}\right)}$, which gives another way to compute $f(n)$.  Additionally, one can also get that the expected number of shots Robin gets off is $\displaystyle{\left(1+\frac{19}{100}\right)f(10) = \prod_{i = 1}^{10}\left(1 + \frac{2i-1}{100}\right)}$ using a similar argument.
+
+This also works if one assumes that there are $c$ concentric circles instead of $10$, giving $f_c(n) = \displaystyle{\prod_{i = 1}^{n-1} \left(1+\frac{2i-1}{c^2}\right)}$ and the expected number of shots is $\displaystyle{\prod_{i=1}^{c}\left(1+\frac{2i-1}{c^2}\right)}$.
+
+But this gives \emph{yet another} way to solve the original problem: as $c\rightarrow \infty$ \sout{we make Marian do an infinite amount of work} we get the answer to the original problem!  Thus, one has that the answer is $\displaystyle{\lim_{c\rightarrow \infty}\prod_{i = 1}^{c}\left(1 + \frac{2i-1}{c^2}\right)}$.  Taking logarithms of the limit, we get that the log of the answer is $\displaystyle{\lim_{c\rightarrow\infty} \sum_{i=1}^{c}\ln\left(1+ \frac{2i-1}{c^2}\right) \approx \sum_{i=1}^{c} \frac{2i-1}{c^2} = 1}$\footnote{If you want precision, notice for $x$ small and positive, one has that $x-x^2/2 < \ln(1+x) < x$.  One immdiately sees that $1$ is always an upper bound for the sum above.  As for the lower bound, you need to sum up $c$ terms that are all at most $2/c^2$ to get the error, showing that $1-(2/c)$ is a lower bound for the sum.  If you want to work, you reduce the $2/c$ by a constant factor but life is too short for that.}, giving $e$ as the answer to the original question.
+
+
+\end{document}

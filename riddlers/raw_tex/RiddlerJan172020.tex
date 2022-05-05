@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\graphicspath{{C:/Users/Erick/Documents/Math/MiscStuff/images/}}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's January 17, 2020 Riddler}
+\author{Emma Knight}
+\begin{document}
+\maketitle
+
+This is a complete solution to the riddler from January 17, 2020.
+
+\begin{question}
+Two ducks are sitting on the middle rock of a $3$ by $3$ grid of rocks.  Every minute, each duck randomly swims to an adjacent rock with equal probability (so if a duck is in the center, then it swims to one of the four edge rocks with a probability of $1/4$ for each, if it's on an edge then it swims to the center with probability $1/3$ and one of the two adjacent corners with probability $1/3$ each, and if it's on a corner it swims to one of the two adjacent edges with probability $1/2$).  How much time on average does it take for the two ducks to rendez-vous again?
+\end{question}
+
+The first observation is that a duck can only move from the center or a corner to an edge, and can only move from an edge to the center or a corner.  So while one might think that there are many different possible configuartions of the ducks, this number is cut in half.  Additionally, the symmetries of a square also cuts down how many states are possible, and the full list is easily seen by just enumerating them out:
+\begin{claim}
+There are $5$ different states for the ducks to be in.  They are:
+\begin{itemize}
+\item Two opposite corners,
+\item Two adjacent corners,
+\item One corner and the center,
+\item Two opposite edges, and
+\item Two adjacent edges.
+\end{itemize}
+\end{claim}
+
+I will call these states $OC, AC, CC, OE,$ and $AE$ respectively.  This is a Markov chain, with the following transition matrix:
+$$M = \left(\begin{matrix}  &  &  & \frac{1}{2} & \frac{1}{2} \\  &  &  & \frac{1}{4} & \frac{1}{2} \\  &  &  & \frac{1}{4} & \frac{1}{2} \\ \frac{2}{9} & \frac{2}{9} & \frac{4}{9} &  &  \\ \frac{1}{9} & \frac{2}{9} & \frac{4}{9} &  &  \end{matrix}\right)$$
+For the readers unfamiliar with Markov chains, the way that this matrix is to be read is as follows: the probability of moving from $OC$ (the first state) to $OE$ (the fourth state) is found by looking at the coefficient in the first row and the fourth column.  Any coefficients that are blank are just $0$.  Finally, I'm suppressing the odds that two ducks move onto the same square.
+
+Now, write $t_{OC}$ to be the expected amount of minutes it takes for the two ducks to move onto the same square given that at minute $0$ they are on opposite corners (and similar variables for the other states).  It's not too hard to see that one gets the following system of equations:
+$$\left(\begin{matrix} t_{OC} \\ t_{AC} \\ t_{CC} \\ t_{OE} \\ t_{AE} \end{matrix}\right) = \left(\begin{matrix} 1 \\ 1\\ 1\\ 1\\ 1\end{matrix}\right) + \left(\begin{matrix}  &  &  & \frac{1}{2} & \frac{1}{2} \\  &  &  & \frac{1}{4} & \frac{1}{2} \\  &  &  & \frac{1}{4} & \frac{1}{2} \\ \frac{2}{9} & \frac{2}{9} & \frac{4}{9} &  &  \\ \frac{1}{9} & \frac{2}{9} & \frac{4}{9} &  &  \end{matrix}\right)\left(\begin{matrix} t_{OC} \\ t_{AC} \\ t_{CC} \\ t_{OE} \\ t_{AE} \end{matrix}\right)$$
+Some simple manipulations turns this into $(I-M)v = v_0$, with $v$ being the vector with the five unknowns ($t_{OC}$ et. al.) and $v_0$ being the vector with all $1$s.  Thus, $v = (I-M)^{-1}v_0$, and since these are specific matrices, it's an easy exercise to ask a computer to compute this.  The answer is $$v = \left(\begin{matrix} \frac{234}{37} \\ \frac{363}{74} \\ \frac{363}{74} \\ \frac{210}{37} \\ \frac{184}{37}\end{matrix} \right).$$
+
+Finally, the answer that we are looking for is $1 + \frac{1}{2} t_{AE} + \frac{1}{4} t_{OE}$: after one minute, there is a $\frac{1}{4}$ chance that the ducks meet again, a $\frac{1}{2}$ chance that they are in adjacent edges, and a $\frac{1}{4}$ chance that they are in opposite edges.  This number is just $\frac{363}{74}$.  This works out to being about $4$ minutes and $54$ seconds.
+
+One can also see what the amount of time is for other starting positions: if both ducks start on an edge, then the expected amount of time is $1 + \frac{2}{9}t_{AC} + \frac{4}{9}t_{CC} = \frac{158}{37}$ or about $4$ minutes and $16$ seconds.  If both ducks start on a corner, then the expected amount of time is $1 + \frac{1}{2}t_{AE} = \frac{129}{37}$, or about $3$ minutes and $29$ seconds.
+\end{document}

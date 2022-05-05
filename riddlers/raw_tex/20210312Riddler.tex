@@ -1,0 +1,86 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's February 19, 2021 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler is about baking pie:
+\begin{question}
+You are baking a pie, and you have a fixed amount of dough to use for crust.  If your pie is a cylinder, what fraction of the crust should you use on the bottom of the pie to maximize the volume of the pie?
+\end{question}
+Assume that the pie has radius $r$ and height $h$.  Then the total amount of crust you have is $A = 2\pi r^2 + 2\pi rh$ and the total volume is $V = \pi r^2 h$.
+
+\emph{Solution 1}: This solution uses only material taught in calc I.  Looking along the curve $A = c$, one can compute $0 = \frac{dA}{dr} = 4\pi r + 2\pi h + 2\pi r\frac{dh}{dr}$, and gets that $\frac{dh}{dr} = -2-\frac{h}{r}$.  This means that $\frac{dV}{dr} = 2\pi rh + \pi r^2\left(\frac{dh}{dr}\right) = 2\pi rh - 2\pi r^2 - \pi rh = \pi r(h-2r)$.  Setting $\frac{dV}{dr} = 0$, one gets that $r = 0$ or $h = 2r$.  Clearly the first solution is a minimum, and the relevant solution is $h = 2r$, so $A = 6\pi r^2$.  Since the bottom of the pie has area $\pi r^2$, you should set aside one-sixth of the crust for the bottom.
+
+\emph{Solution 2}: This is a multivariable calc solution.  Write $x$ for the area of the bottom, and $y$ for the area of the side.  One has that $A = 2x + y$ and $4\pi V^2 = xy^2$; since maximizing $V$ and maximizing $4\pi V^2$ are the same thing, I will do the latter.
+
+We need to maximize $xy^2$ subject to $2x+y = c$; using Lagrange multipliers, one gets the equations $y^2 = 2\lambda$ and $2xy = \lambda$.  Equating these two equations, we get $y^2 = 4xy$ so either $y = 0$ (clearly not a maximum) or $y = 4x$.  Thus, the area is $6x$, so, as before, we should set aside one-sixth of the crust for the bottom.
+
+All told, this pie looks more like an enclosed canoli than an actual pie.
+\end{document}

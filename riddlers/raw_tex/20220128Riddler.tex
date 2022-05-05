@@ -1,0 +1,92 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's Janurary 28, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+
+This week's riddler, from Travis Henry, is a question about car troubles:
+\begin{question}
+You want to change the transmission fluid in your old van, which holds 12 quarts of fluid. At the moment, all 12 quarts are ``old'' But changing all 12 quarts at once carries a risk of transmission failure.
+
+Instead, you decide to replace the fluid a little bit at a time. Each month, you remove one quart of old fluid, add one quart of fresh fluid and then drive the van to thoroughly mix up the fluid. Unfortunately, after precisely one year of use, what was once fresh transmission fluid officially turns ``old.''
+
+You keep up this process for many, many years. One day, immediately after replacing a quart of fluid, you decide to check your transmission. What percent of the fluid is old?
+\end{question}
+There are two ways to approach this problem.  The first way is to compute how much fluid becomes old, and how much fluid becomes new, and set them equal.  Assume you are in the steady state, and that the portion of fluid that is old is $p$.  Then, at a new month when you change the fluid, you remove $p$ quarts of old fluid.  However, any fluid that remains from last year becomes old.  The amount of such fluid is $\left(\frac{11}{12}\right)^{12}$ quarts, as each month, as you add new fluid in, the amount of fluid from that month gets diluted by a factor of $\frac{11}{12}$.  Thus, $p = \left(\frac{11}{12}\right)^{12}$ (which, it should be noted, is pretty close to $e^{-1}$).
+
+Alternatively, you can just straight up compute how much new fluid is in the tank.  You add one quart of new fluid every month for the past 11 months, but each month the amount gets diluted by a factor of $\frac{11}{12}$.  Thus, there are $1 + \frac{11}{12} + \cdots + \left(\frac{11}{12}\right)^{11}$ quarts of new fluid in the tank.  Thus, 
+\begin{align*}
+1-p & = \left(\frac{1}{12}\right)\left(1 + \frac{11}{12} + \cdots + \left(\frac{11}{12}\right)^{11}\right) \\
+& = \left(1-\frac{11}{12}\right)\left(1 + \frac{11}{12} + \cdots + \left(\frac{11}{12}\right)^{11}\right) \\
+& = 1- \left(\frac{11}{12}\right)^{12}.
+\end{align*}
+
+As before, this gives $p = \left(\frac{11}{12}\right)^{12}$.  This also says that you reach the steady state (exactly!) in one year, which isn't obvious from the first solution.
+\end{document}

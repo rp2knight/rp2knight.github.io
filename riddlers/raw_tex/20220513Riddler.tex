@@ -1,0 +1,98 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's May 13, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Ross O'Brien,  is about a game with dice:
+\begin{question}
+You play a game in which you roll them all and divide them into two groups: those whose values are unique, and those which are duplicates.  Next, you reroll all the dice in the duplicate pool and sort all the dice again.  You continue rerolling the duplicate pool and sorting all the dice until all the dice are members of the same group. If all four dice are in the ``unique'' group, you win. If all four are in the ``duplicate'' group, you lose.
+
+What is your probability of winning the game?
+\end{question}
+
+Since the actual numbers don't matter but only the constellation of what you roll, there are 5 possible states:
+\begin{itemize}
+\item aaaa
+\item aaab
+\item aabb
+\item aabc
+\item abcd
+\end{itemize}
+The first and third possibilities are a loss, and the fifth is a win.  Call $x$ the probability you win if the state before was aaab and $y$ the probability you win if the state before was aabc.  Then one gets the following two equations:
+\begin{align*}
+x & = \frac{3}{32} + \frac{3}{16} x + \frac{9}{16} y \\
+y & = \frac{1}{8} + \frac{1}{8} x + \frac{5}{8} y
+\end{align*}
+These equations come from looking at what happens when you reroll the relevant dice.  It is not too hard to solve these equations and get that $x = \frac{9}{20}$ and $y = \frac{29}{60}$.  Additionally, since only the configuration of the dice matter and not the actual numbers, the probability that you win from starting is just $x$, as laying one die flat on the table doesn't change anything.
+
+Why is the answer so close to $50-50$?  In the state aaab, a decisive roll is $3-5$ to win, and in the state aabc, a decisive roll is $1-1$ to win.  Thus, your odds of winning should be between $37.5\%$ and $50\%$.  However, you are routinely more likely to end up in the aabc state than the aaab state, so it will be closer to $50\%$ to win than $37.5\%$ to win.
+
+Finally, since in both states, you have a $1/4$ chance of making a decisive roll, the game should take, on average, $4$ rolls to end.
+\end{document}

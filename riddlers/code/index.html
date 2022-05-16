@@ -60,4 +60,21 @@
 </table>
 <hr>
 <a href="https://translifeline.org/" target="_blank"><img src="../trans.jpg" height="30" width = "50"></a> <a href="https://pflagcanada.ca/" target=_blank"><img src="../lgbt.png" height="30" width = "50"></a>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
+
 </body></html>

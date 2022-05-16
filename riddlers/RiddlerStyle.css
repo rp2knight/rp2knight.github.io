@@ -32,10 +32,10 @@ body {
 
 .collapsible:after {
   content: '\02795'; /* Unicode character for "plus" sign (+) */
-  font-size: 13px;
+  font-size: 15px;
   color: white;
   float: left;
-  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .active:after {

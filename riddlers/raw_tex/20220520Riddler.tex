@@ -1,0 +1,81 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's May 20, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler is about black hole photography:
+\begin{question}
+Assuming the accretion disk of a black hole is equally likely to be in any plane, what is the probability of it being within $10$ degrees of perpendicular to us, thereby resulting in a spectacular image?
+\end{question}
+
+To think about the geometry of the situation, the accretion disk is within $10$ degrees of being perpendicular to us if and only if the normal vector is within $10$ degrees of being parellel to us (note that there are two normal vectors, but choosing a vector that is at most $90$ degrees off being parellel is unique up to a set of measure zero).  Since there is a hemisphere of possible normal vectors (see previous parenthetical), one merely needs to compute the area of this ten degree cap, and divide it by $2\pi$ to get the probability.
+
+This cap is easily parameterized by $f(u, v) = (\cos(u)\sin(v), \sin(u)\sin(v), \cos(v))$ for $u \in [0, 2\pi]$ and $v \in [0, \pi/18]$.  Computing the area is now standard: $f_u = (-\sin(u)\sin(v), \cos(u)\sin(v), 0)$ and $f_v = (\cos(u)\cos(v), \sin(u)\cos(v), -\sin(v))$.  Then $||f_u \times f_v|| = \sin(v)$, so the area is $\displaystyle{\int_0^{2\pi}\int_0^{\pi/18}\sin(v)dvdu}$.  This is a very straightforward integral that works out to $2\pi(1-\cos(\pi/18))$.  Thus, the probability of the disk image being this nice is $1-\cos(\pi/18) \approx .01519$.
+\end{document}

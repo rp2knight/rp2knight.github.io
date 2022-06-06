@@ -1,0 +1,95 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's June 3, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Jason Zimba, is about getting lost in a desert:
+\begin{question}
+In the Great Riddlerian Desert, there is a single oasis that is straight and narrow. There are $N$ travelers who are trapped at the oasis, and one day, they agree that they will all leave. They independently pick a random location in the oasis from which to start and a random direction in which to travel. Once their supplies are packed, they all head out.
+
+What is the probability that none of their paths will intersect, in terms of $N$? (For the purposes of this puzzle, assume the oasis is the line segment from $(0, -1)$ to $(0, 1)$, while the desert is an infinite Cartesian plane.)
+\end{question}
+There are two ways to interpret this problem: either you assume that they all have an increasing $x$-direction, or you don't.  I will handle the first case first, as it is useful in the second case.
+
+I will first solve the $N = 2$ case.  With the two people, one will start higher on the oasis than the other; independently, one will have a greater slope than the other.  It's easy to see that the paths don't cross if and only if the person that starts higher up on the oasis also has the greater slope.  That clearly happens one-half of the time, so the probability that the paths don't intersect is $1/2$.
+
+With $N$ people, two particular people will have their paths cross under the same condition as above: one of them starts higher up on the oasis while the other has a greater slope.  Thus, if you order the people in two different ways (highest to lowest on the oasis, and greatest to least slope), then nobody crosses paths with anyone else if and only if these orderings are the same.  That happens $1/(N!)$ of the time.
+
+That's all well and good, but what if people can have a positive or negative $x$-direction?  This makes things more complicated, but a moment's thought reduces it to the previous case: a person can only cross paths with someone that had the same sign on their $x$-direction, so this splits up into cases where $k$ people move in the positive $x$-direction and $N-k$ people move in the negative $x$-direction.  The probability that that happens is $\binom{n}{k}2^{-N}$, and the probability that nobodies paths cross in that case is $1/(k!(N-k)!)$.  Thus, the probability that nobodies paths cross is
+\begin{align*}
+\sum_{k=0}^N \binom{N}{k}\frac{1}{2^Nk!(N-k)!} & = \sum_{k=0}^{N} \binom{N}{k}^2\frac{1}{2^NN!} \\
+& = \frac{1}{2^NN!} \sum_{k=0}^N \binom{N}{k}^2 \\
+& = \frac{1}{2^NN!} \binom{2N}{N} \\
+& = \frac{(2N)!}{2^N(N!)^3} \\
+& \approx \frac{(2N/e)^{2N} \sqrt{4\pi N}}{2^N(N/e)^{3N}(\sqrt{2\pi N})^3} \\
+& = \frac{(2e)^N\sqrt{2}}{2\pi N^{N+1}}
+\end{align*}
+The third line comes from the fact that when you choose $N$ things from $2N$ objects, you can choose $k$ things from the first $N$ objects and then not choose $k$ things from the last $N$ objects.  The fifth line is just using Stirling's approximation.
+\end{document}

@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's June 17, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler is takes a classic setup and makes it pretty different:
+\begin{question}
+You have an urn with an equal number of red balls and white balls, but you have no information about what that number might be. You draw 19 balls at random, without replacement, and you get eight red balls and 11 white balls. What is your best guess for the original number of balls (red and white) in the urn?
+\end{question}
+To make this question precise, I will assume that, prior to pulling any balls out of the urn, you believe that there is some constant $C \gg 0$ such that the urn contains at most $2C$ balls, and any even number of balls is equally likely.  We are then looking for the value of $n$ such that the probability of there being $2n$ balls in the urn given that $19$ draws produce $11$ white balls and $8$ red balls.  Since the probability of there being $2n$ balls in the urn is equally likely across all $n$, we are thus looking to maximize the probability that you draw $11$ white balls and $8$ red balls from an urn with $2n$ balls.
+
+One can define $H(N, K, n, k) = \displaystyle{\frac{\binom{K}{k}\binom{N-K}{n-k}}{\binom{N}{n}}}$, the hypergeometric distribution.  This represents the probability of choosing $k$ successes in $n$ times from a population of size $N$ with $K$ successes.  With our setup, we are looking to maxamize $H(2n, n, 19, 11) = \displaystyle{\frac{\binom{n}{11}\binom{n}{8}}{\binom{2n}{19}}}$ as a function of $n$.  One has that this tends to $2^{-19}\binom{19}{11} \approx .14416$ as $n \rightarrow \infty$, as eventually drawing without replacement stops mattering as $n$ gets large.
+
+There isn't really much more to this; you just plug and chug until you find the max.  The winning value of $n$ winds up being $17$, with a probability of the draw being approximately $.1621$.  Below is a graph of the values from $11$ to $1000$, with the green line being the limiting probability.
+
+\includegraphics{20220617picture.png}
+\end{document}

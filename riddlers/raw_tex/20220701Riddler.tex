@@ -1,0 +1,112 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's July 1, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler is about standing on towers:
+\begin{question}
+As the Royal Astronomer of Planet Xiddler, you wake up from a dream in which you measured the planet’s radius using a satellite. ``How silly!'' you think to yourself. ``Satellites haven’t even been invented yet!'' And so you and another astronomer set out to investigate the curvature of the planet.
+
+The two of you climb two of the tallest towers on the planet, which happen to be in neighboring cities. You both travel 100 meters up each tower on a clear day. Due to the curvature of the planet, you can barely make each other out.
+
+Next, your friend returns to the ground floor of their tower. How high up your tower must you be so that you can just barely make out your friend again?
+\end{question}
+To make numbers more convenient, I will say that you are one unit above the surface when standing on the tower.  To picture this, I will draw a little cross-section:
+
+\begin{tikzpicture}
+\draw (0,0) -- node[midway, above] {$r+1$} (10, {20-sqrt(300)}) -- (10, {-20+sqrt(300)}) -- (0,0) -- node[midway, above] {$r$} (10, 0);
+\draw (2, 0) arc (0:15:2) node[midway, right] {$\theta$};
+\draw[thick,black] ({10*cos(15)}, {-10*sin(15)}) arc (-15:15:10);
+\end{tikzpicture}
+
+Here, $\theta$ is half the angle between your position and your colleague's position.  One has that $\cos(\theta) = \frac{r}{r+1}$, which rearranges to $r = \frac{\cos(\theta)}{1-\cos(\theta)}$.  Here is the picture of what happens when your colleague goes to ground level (letting $x$ be how high up you need to be):
+
+\begin{tikzpicture}
+\draw (0,0) -- node[midway, above left] {$r+x$} (10, {sqrt(100/3)}) -- (10, {-20+sqrt(300)}) -- (0,0) -- node[midway, above] {$r$} (10, 0);
+\draw (0,0) -- node[midway, above] {$r+1$} (10, {20-sqrt(300)});
+\draw (2, 0) arc (0:15:2) node[midway, right] {$\theta$};
+\draw[thick,black] ({10*cos(15)}, {-10*sin(15)}) arc (-15:30:10);
+\end{tikzpicture}
+
+One has that $\cos(2\theta) = \frac{r}{r+x}$.  That simplifies as follows:
+\begin{align*}
+\frac{r}{r+x} & = \cos(2\theta) \\
+& = 2\cos^2(\theta) - 1 \\
+& = 2\left(\frac{r}{r+1}\right)^2 - 1 \\
+& = \frac{2r^2 - (r+1)^2}{(r+1)^2} \\
+& = \frac{r^2 - 2r -1}{r^2 + 2r + 1} \\
+\frac{x}{r} + 1 & = \frac{r^2 + 2r + 1}{r^2 - 2r - 1} \\
+\frac{x}{r} & = \frac{4r + 2}{r^2 - 2r - 1} \\
+x & = \frac{4r^2 + 2r}{r^2 - 2r - 1} \\
+& = 4 + \frac{10r + 4}{r^2 - 2r - 1} \\
+\end{align*}
+
+It's not too hard to show that if $r > 13 + 6\sqrt{5}$, then $4 + \frac{10}{r} < x < 4 + \frac{11}{r}$.  If $\theta$ is small and so $r$ is large, then this is approximately $4$.  On the other hand, if $\theta = \frac{\pi}{4}$ then it is literally impossible for you to go high enough to see your colleague.  If $\theta > \frac{\pi}{4}$, then you need to tunnel through the planet to be able to see them.  Of course, in both of these cases, you are assuming that the towers that you are standing on are close to the radius of the planet, which seems unreasonable.  I will then say that my answer is that you need to go about $400$ meters above the ground to see your colleague.
+\end{document}

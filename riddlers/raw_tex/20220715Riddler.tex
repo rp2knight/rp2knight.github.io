@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's July 15, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+This week's riddler is about marking a die:
+\begin{question}
+I have an unlabeled, six-sided die. I make a single mark on the middle of each face that is parallel to one pair of that face’s four edges.
+
+How many unique ways are there for me to mark the die? (Note: If two ways can be rotated so that they appear the same, then they are considered to be the same marking.)
+
+\emph{Extra credit}: Suppose you can also mark a face along one of its two diagonals. Now how many unique ways are there to mark the die?
+\end{question}
+
+This is a classic Burnside's Lemma problem.  Let $G$ be the group of rotations of the unit cube, and let $X$ be the set of ways to mark the die not up to rotation (so there are $2^6 = 64$ elements of $X$).  Then the number of orbits in $X$ under the action of $G$ is $\displaystyle{\frac{1}{|G|}\sum_{g \in G}|X^g|}$ where $X^g$ is the set of elements of $X$ that are fixed by $g$\footnote{The proof of this is almost immediate from the orbit stabilizer theorem: $|G|$ times the number of orbits is $\displaystyle{\sum_{O \in G\backslash X} |G| = \sum_{x \in X} |Stab(x)| = \sum_{x \in X, g \in G \atop gx = x} 1 = \sum_{g \in G} |X^g|}$.}.
+
+Then one can just list out what happens for each type of rotation:
+
+\begin{tabular}{c|c|c}
+Type of rotation & Number of such rotations & Size of stabilizer \\ \hline \hline 
+Identity & $1$ & $64$  \\\hline 
+$90$ degree face rotation & $6$ & $0$ \\ \hline
+$180$ degree face rotation & $3$ & $16$ \\ \hline
+$120$ degree corner rotation & $8$ & $4$ \\ \hline
+$180$ degree edge rotation & $6$ & $8$
+\end{tabular}
+
+This gives that the number of ways to cast a die is $\frac{64+48 + 32 + 48}{24} = 8$.
+
+For the extra credit, the calculation is similar:
+
+\begin{tabular}{c|c|c}
+Type of rotation & Number of such rotations & Size of stabilizer \\ \hline \hline 
+Identity & $1$ & $4096$  \\\hline 
+$90$ degree face rotation & $6$ & $0$ \\ \hline
+$180$ degree face rotation & $3$ & $256$ \\ \hline
+$120$ degree corner rotation & $8$ & $16$ \\ \hline
+$180$ degree edge rotation & $6$ & $64$
+\end{tabular}
+
+This gives the number of such ways to cast a bonus die is $\frac{4096 + 768 + 128 + 384}{24} = 224$.
+\end{document}

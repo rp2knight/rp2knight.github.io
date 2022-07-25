@@ -1,0 +1,92 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's July 22, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Alec Stein, Jesse Zymet, and Adam Greenberg, is about losing your marbles:
+\begin{question}
+At the Riddler Marble Shop, there are four enormous bags of marbles for you to acquire. They are labeled ``red,'' ``green,'' ``blue'' and ``assorted.'' Being the purist that you are, you want to select two bags of marbles that are not assorted, and you’d settle for some combination of red, green or blue.
+
+However, noticing your interest in the bags, the shopkeeper alerts you. ``Buyer beware,'' she warns. ``Some jerk switched around the labels on all four bags. Right now, every single bag is incorrectly labeled.'' To give you a chance of properly identifying the bags you would like, she has kindly allowed you to take two - and only two - marbles out of any of the bags, one at a time.
+
+How can you guarantee that neither of the two bags you take is assorted?
+\end{question}
+The following is one strategy, not guaranteed to be the only one.
+
+First, you take a marble out of the bag labelled ``assorted.,'' and then you take a marble out of a bag that is labelled the color that the first marble you took was.  There are now two possibiliities:
+\begin{itemize}
+\item If the second marble's color matched the label of the bag it was in, choose any two bags other than that one.
+\item If the second marble's color was not the color of the bag it was in, then choose the bag labelled with the second marble's color and the bag labelled ``assorted.''
+\end{itemize}
+
+Why this works: without loss of generality, we may assume that the first marble is red (since the ``assorted'' bag is homogeneous, it must only have red marbles in it).  If there is a red marble in the ``red'' bag, then the ``red'' bag must have assorted marbles, and so the other three bags are homogeneous and choosing any two of them works.
+
+If the second marble is, say, green, then either the ``red'' bag has assorted marbles or it has only green marbles.  If the ``red'' bag has assorted marbles, then, for exactly the same reason as above, the ``green'' and ``assorted'' bags must be homogeneous.  If, on the other hand, the ``red'' bag has only green marbles, then the ``green'' bag cannot have assorted marbles (if it did, then the ``blue'' bag must have blue marbles) and so it must also be homogeneous. 
+\end{document}

@@ -1,0 +1,121 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's August 12, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Andrew Lin, is about gambling your life away:
+\begin{question}
+You are stranded in a casino (lucky you!) and need to purchase a flight home. Flights cost $\$250$, but you have only $\$100$ at the moment. However, as I just said, you’re in a casino! Surely, you can gamble your way to $\$250$.
+
+The casino has a game called ``Riddler’s Delight,'' in which you can bet any amount of money in your possession for an even greater amount of money. You can even bet fractional (i.e., you can bet fractions of a penny), irrational or infinitesimal amounts if you so desire.
+
+The catch is that the odds are not in your favor. In Riddler’s Delight, whenever you bet $A$ dollars in an attempt to win $B$ dollars (with $B > A$), your probability of winning is not $A/B$, which you would expect from a fair game. Instead, your probability of winning is always $10$ percent less, or $0.9(A/B)$.
+
+What should your betting strategy be to maximize your probability of getting home, and what is that probability?
+\end{question}
+Before starting this problem, I want to explain how to solve the fair problem, that is, you pay $A$ for a $A/B$ chance to win $B$.  I claim that any strategy that satisfies the following three basic principles of being a sensible strategy succeeds $2/5$s of the time, and any other strategy is worse:
+\begin{enumerate}
+\item You don't quit unless you have $0$ dollars,
+\item You never bet to end up with more than $250$ dollars, and
+\item You quit or win with probability $1$.
+\end{enumerate}
+
+The key point is that, at the end of any strategy you take, the expected amount of money you have is $100$ dollars, as no bet you make can change that expected value.  It is then abundantly clear that
+\begin{itemize}
+\item Any strategy that follows those three items has a $40\%$ chance of hitting $250$ dollars, and
+\item If your strategy doesn't follow one of those three items, then you must leave some of your expected money in suboptimal places.
+\end{itemize}
+
+Thus, you can never do better than having a $40\%$ chance of making it out.
+
+But how about the problem at hand?  How can one succeed at this problem?  I will outline a sequence of steps that concludes with showing that you can never do better than having a $\displaystyle{1-\left(\frac{3}{5}\right)^{\frac{9}{10}}}$ chance of getting out.
+
+First, I claim that you should never make a bet where a victory doesn't end with you at $250$ dollars.  The key observation is that, if you bet $A$ dollars, then the expected value of your bet is $-\frac{A}{10}$.  Thinking back to the previous argument, you want your strategy to maximize the expected amount of money you have at the end, and spending money that you make is clearly suboptimal\footnote{I'm aware this isn't a precise argument; if my big picture statement is wrong then this is where it is wrong.}.
+
+Thus, any good strategy is specified by a sequence $100 = a_0 > a_1 > \cdots > a_{n-1} > a_n = 0$, where at step $k$ if you haven't gotten to $250$ dollars, you wager $a_k-a_{k+1}$ dollars and try to win $250-a_{k-1}$ dollars.  I will define the $n$-regular strategy $S_n = \{100, 100(n-1)/n, 100(n-2)/n, \ldots, 100/n, 0\}$, and $p(S)$ to be the probability that a strategy $S$ succeeds.
+
+The next claim is that, if $S$ is the strategy $a_0, a_1, \ldots, a_n$, and $a$ is a number between $a_k$ and $a_{k+1}$, then the strategy $a_0, \ldots, a_k, a, a_{k+1}, \ldots, a_n$ is strictly better than $S$.  Indeed, it is not too hard to check that you are more likely to succeed with the two bets $a_k - a$ and $a - a_{k+1}$ and therefore your expected losses go down by inserting this extra bet.
+
+After this, I assert that $\displaystyle{\lim_{n \rightarrow \infty} p(S_n) = 1-\left(\frac{3}{5}\right)^{\frac{9}{10}}}$.  To see this, observe that $1-p(S_n)$ is the probability that all of your bets fail.  Then, one has that
+\begin{align*}
+1-p(S_n) & = \prod_{k = 1}^n \left(1 - \frac{9}{10}\frac{100/n}{150 + 100k/n}\right) \\
+& = \prod_{k = 1}^n \left(1 - \frac{9}{10}\frac{2}{3n + 2k}\right) \\
+& = \prod_{k = 1}^n \left(1 - \frac{9}{15n + 10k}\right) \\
+& = \exp\left(\sum_{k = 1}^n\ln\left(1-\frac{9}{15n + 10k}\right)\right) \\
+& = \exp\left(-\sum_{k = 1}^n\frac{9}{15n + 10k} + O(n^{-2})\right) \\
+& = \exp\left(-\frac{1}{n}\sum_{k = 1}^n\frac{9}{15 + 10(k/n)}\right)\exp\left(O(n^{-1})\right) \\
+\end{align*}
+
+As $n \rightarrow \infty$, the second term goes to $1$ and the term inside the exponent in the first becomes the integral $\displaystyle{-\int_{0}^1 \frac{9dx}{15+10x} = \frac{9}{10}(\ln(15)-\ln(25)) = \frac{9}{10}\ln\left(\frac{3}{5}\right)}$, and so the limit is as claimed.
+
+Finally, for fixed $n$, since the sequence of numbers $p(S_{n2^i})$ is monotonically increasing and tends to $\displaystyle{1-\left(\frac{3}{5}\right)^{\frac{9}{10}}}$, one must have that $\displaystyle{p(S_n) <  1-\left(\frac{3}{5}\right)^{\frac{9}{10}}}$ for all $n$.  If $S$ is \emph{any} fixed strategy, then one can choose $n$ sufficiently large so that $P(S_n)$ is within $\epsilon$ of a refinement of $S$: choose $n$ large enough that no two terms in $S$ have their closest term in $S_n$ being the same.  Then one considers the strategy where you move each term in $S_n$ that is a closest term to a term in $S$ to the corresponding term in $S$; since things are continuous, if these movements are sufficiently small you change your probability by at most $\epsilon$.
+
+Thus, no strategy can do better than this limiting strategy, and so you can have no better than a $\displaystyle{1 - \left(\frac{3}{5}\right)^{\frac{9}{10}}} \approx 36.855\%$ chance of winning\footnote{This is not that much better than just wagering it all on the first bet, which succeeds $36\%$ of the time.}.  Indeed, if you start with $x$ dollars, need to reach $y$ dollars, and the probability of successfully betting $A$ to win $B$ is $zA/B$ (with $z<1$), then you can do no better than $\displaystyle{1-\left(1-\frac{x}{y}\right)^z}$ to make it to $y$ dollars.
+\end{document}

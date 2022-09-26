@@ -1,0 +1,93 @@
+\documentclass[11pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{epstopdf}
+\usepackage{enumerate}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\usepackage[normalem]{ulem}
+\allowdisplaybreaks
+\graphicspath{{./Images/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\textwidth = 6.5 in
+\textheight = 9 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = 0.0 in
+\headheight = 0.0 in
+\headsep = 0.0 in
+\parskip = 0.2in
+\parindent = 0.0in
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Claim}[Theorem]{Claim}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Proposition}[Theorem]{Proposition}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}
+\newtheorem{assumption}{Assumption}
+\newtheorem{aside}{Aside}
+\newtheorem{fact}{Fact}
+
+
+\theoremstyle{definition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Hom}{\mathrm{Hom}}
+
+\title{FiveThirtyEight's September 23, 2022 Riddler}
+\author{Emma Knight}
+\date{\today}
+\begin{document}
+\maketitle
+This week's riddler, courtesy of Gradon Snider, is a puzzle about letters:
+\begin{question}
+Graydon is about to depart on a boating expedition that seeks to catch footage of the rare aquatic creature, F. Riddlerius. Every day he is away, he will send a hand-written letter to his new best friend, David Hacker.  But if Graydon still has not spotted the creature after $N$ days (where $N$ is some very, very large number), he will return home.
+
+Knowing the value of $N$, Graydon confides to David there is only a $50$ percent chance of the expedition ending in success before the N days have passed. But as soon as any footage is collected, he will immediately return home (after sending a letter that day, of course).
+
+On average, for what fraction of the $N$ days should David expect to receive a letter?
+\end{question}
+Let the probability of seeing the creature on one individual day be $p$.  Then one has that $(1-p)^N = 1/2$.  If $N$ is large, then one has that $N\ln(1-p) = -\ln(2)$, or that $Np \approx \ln(2)$.
+
+One can easily write down a formula for the expected fraction: $F = \frac{p}{N} + \frac{2p(1-p)}{N} + \cdots + \frac{(N-1)p(1-p)^{N-2}}{N} + \frac{Np(1-p)^{N-1}}{N} + \frac{1}{2}$; the last term is what happens if Graydon doesn't see the creature and the remaining terms are what happens if he sees the creature during the expodition.  Now, one just computes\footnote{There is another approach worth mentioning: you can write $(1-p) = 2^{1/N}$, and then, after factoring out $\frac{Np}{1-p} \approx \ln(2)$ from the sum, the sum becomes a Riemann sum for $\int_0^1 x2^{-x}dx$ and so may be replaced with that integral.}:
+\begin{align*}
+F & = \frac{p}{N} + \frac{2p(1-p)}{N} + \cdots + \frac{(N-1)p(1-p)^{N-2}}{N} + \frac{Np(1-p)^{N-1}}{N} + \frac{1}{2} \\
+& = \frac{p}{N}\left(1 + 2(1-p) + \cdots + N(1-p)^{N-1}\right) + \frac{1}{2} \\
+& = \frac{p}{N}\left(\frac{1-(1-p)^N}{p} + \frac{(1-p)-(1-p)^N}{p} + \cdots + \frac{(1-p)^{N-1} - (1-p)^N}{p}\right) + \frac{1}{2} \\
+& = \frac{1}{N}\left(1 + (1-p) + \cdots (1-p)^{N-1}\right) - (1-p)^N + \frac{1}{2} \\
+& = \frac{1-(1-p)^N}{pN} -\frac{1}{2} + \frac{1}{2} \\
+& = \frac{1}{2\ln(2)}.
+\end{align*}
+All told, this means that David should expect to see a letter about $72.135\%$ of the time.
+\end{document}
